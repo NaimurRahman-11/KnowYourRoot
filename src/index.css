@@ -2741,3 +2741,154 @@ body, [lang="bn"], h1, h2, h3, h4, h5, h6, button, input {
   color: var(--emerald-bright);
   font-weight: 600;
 }
+
+
+
+/* ==========================================================================
+   Passport Modal — Culinary Visa Stamps Preview Styles
+   ========================================================================== */
+
+.card-stats-counter {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stats-counter-num {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stats-counter-den {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.holder-rank-tag {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.preview-stamps-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stamps-header-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  opacity: 0.9;
+}
+
+.preview-stamps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.preview-food-stamp {
+  border: 1px solid;
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.stamp-top-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.stamp-div-tag {
+  opacity: 0.9;
+}
+
+.stamp-gi-tag {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  padding: 1px 6px;
+  border-radius: 99px;
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+.stamp-food-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stamp-food-emoji {
+  font-size: 22px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.stamp-food-names {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.stamp-food-name {
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stamp-district-name {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stamp-verification-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 3px 6px;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+
+.preview-empty-stamp-prompt {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 24px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.preview-extra-foods-note {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}

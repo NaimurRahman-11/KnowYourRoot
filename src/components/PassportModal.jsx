@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { THEMES, generatePassportCard, triggerCelebrationConfetti } from '../utils/passportCard.js';
-import { Award, Download, Camera, Trash2, X, Sparkles, CheckCircle } from 'lucide-react';
+import { THEMES, generatePassportCard, triggerCelebrationConfetti, getRankTitle, bnDigits } from '../utils/passportCard.js';
+import { FOOD_CULTURE_DATA } from '../data/food-culture-data.js';
+import { Award, Download, Camera, Trash2, X, Sparkles, CheckCircle, MapPin, Check } from 'lucide-react';
 
 export default function PassportModal({
   isOpen,
@@ -38,6 +39,11 @@ export default function PassportModal({
   const tastedCount = selected.size;
   const percentage = Math.round((tastedCount / 64) * 100);
 
+  // Map food data for preview
+  const foodMap = new Map();
+  FOOD_CULTURE_DATA.forEach((d) => foodMap.set(d.id, d));
+  const tastedList = Array.from(selected).map((id) => foodMap.get(id)).filter(Boolean);
+
   const handleAvatarUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -51,6 +57,7 @@ export default function PassportModal({
   const handleDownload = async () => {
     setIsExporting(true);
     try {
+      // Pass the live latest selected Set and avatarImg
       await generatePassportCard(userName, avatarImg, selected, themeId, lang);
       triggerCelebrationConfetti();
     } catch (err) {
@@ -59,6 +66,9 @@ export default function PassportModal({
       setIsExporting(false);
     }
   };
+
+  const hashVal = Math.abs(userName.split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0) % 90000 + 10000);
+  const serialNo = `BD-KYR-2026-${hashVal}`;
 
   return (
     <div className="passport-modal-backdrop" onClick={onClose}>
@@ -71,10 +81,12 @@ export default function PassportModal({
             </div>
             <div>
               <h3 className="passport-modal-title">
-                {isBn ? 'আপনার ডিজিটাল টেস্ট পাসপোর্ট' : 'Your Official Taste Passport'}
+                {isBn ? 'আপনার ডিজিটাল টেস্ট পাসপোর্ট (Culinary Visa)' : 'Official Culinary Visa & Taste Passport'}
               </h3>
               <p className="passport-modal-sub">
-                {isBn ? 'সোশ্যাল মিডিয়ায় শেয়ার করার জন্য ১২০০x১৬০০ পিক্সেল হাই-রেজ্যুলেশন কার্ড' : 'High-definition 1200x1600px collectible social card'}
+                {isBn
+                  ? 'আপনার চেখে দেখা খাঁটি ঐতিহ্যবাহী খাবারের শেয়ারযোগ্য সোশ্যাল কার্ড (১২০০x১৬০০ HD)'
+                  : 'Collectible high-res card showcasing the authentic regional foods you explored'}
               </p>
             </div>
           </div>
@@ -92,35 +104,33 @@ export default function PassportModal({
               style={{
                 background: currentTheme.bg,
                 color: currentTheme.ink,
-                borderColor: currentTheme.accent
+                borderColor: currentTheme.stroke
               }}
             >
-              {/* Card Gold Trim */}
-              <div className="card-ornament-border" style={{ borderColor: currentTheme.accent }}>
+              {/* Card Gold Trim Frame */}
+              <div className="card-ornament-border" style={{ borderColor: currentTheme.gold }}>
+                {/* Government Seal & Crest Header */}
                 <div className="card-top-header">
-                  <div className="header-national-mark">
-                    <span className="seal-emblem">🇧🇩</span>
-                    <span className="seal-text">
-                      {isBn ? 'গণপ্রজাতন্ত্রী বাংলাদেশ' : "PEOPLE'S REPUBLIC OF BANGLADESH"}
-                    </span>
+                  <div className="header-national-mark" style={{ color: currentTheme.gold }}>
+                    <span>PEOPLE'S REPUBLIC OF BANGLADESH</span>
                   </div>
-                  <div className="card-serial">
-                    KYR-{Math.abs(userName.split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0) % 90000 + 10000)}
+                  <div className="card-serial" style={{ color: currentTheme.muted }}>
+                    {serialNo}
                   </div>
                 </div>
 
                 <div className="card-main-title-block">
-                  <h4 style={{ color: currentTheme.accent }}>
-                    {isBn ? 'স্বাদ ও ঐতিহ্য ভ্রমণ পাসপোর্ট' : 'OFFICIAL TASTE PASSPORT'}
+                  <h4 style={{ color: currentTheme.ink }}>
+                    {isBn ? 'অফিসিয়াল রন্ধন ঐতিহ্য পাসপোর্ট' : 'OFFICIAL TASTE PASSPORT'}
                   </h4>
-                  <span className="card-title-sub">
-                    {isBn ? '৬৪ জেলার আঞ্চলিক রন্ধনশৈলী অভিযাত্রা' : '64 Districts Culinary Heritage Odyssey'}
+                  <span className="card-title-sub" style={{ color: currentTheme.accent }}>
+                    {isBn ? '৬৪ জেলার খাঁটি স্বাদ ও সংস্কৃতির অভিযাত্রা' : '64 Districts Authentic Bengal Gastronomy'}
                   </span>
                 </div>
 
-                {/* Profile Mini Row */}
-                <div className="card-profile-strip">
-                  <div className="card-avatar-frame" style={{ borderColor: currentTheme.accent }}>
+                {/* Profile Strip */}
+                <div className="card-profile-strip" style={{ background: currentTheme.cardBg, borderColor: currentTheme.border }}>
+                  <div className="card-avatar-frame" style={{ borderColor: currentTheme.gold }}>
                     {avatarImg ? (
                       <img src={avatarImg} alt="Traveler" className="card-avatar-image" />
                     ) : (
@@ -128,34 +138,85 @@ export default function PassportModal({
                     )}
                   </div>
                   <div className="card-holder-info">
-                    <span className="holder-alias">{userName || (isBn ? 'অজ্ঞাতনামা পথিক' : 'Anonymous Explorer')}</span>
-                    <span className="holder-roots-score">
-                      🏆 {tastedCount} / 64 {isBn ? 'জেলা চেখেছেন' : 'Districts'} ({percentage}%)
+                    <span className="holder-alias" style={{ color: currentTheme.ink }}>
+                      {userName || (isBn ? 'বাংলার রসিক অভিযাত্রী' : 'Bengal Roots Traveler')}
                     </span>
+                    <span className="holder-rank-tag" style={{ color: currentTheme.gold }}>
+                      🏅 {getRankTitle(tastedCount, lang)}
+                    </span>
+                  </div>
+
+                  <div className="card-stats-counter" style={{ color: currentTheme.gold }}>
+                    <span className="stats-counter-num">{isBn ? bnDigits(tastedCount) : tastedCount}</span>
+                    <span className="stats-counter-den" style={{ color: currentTheme.muted }}>/ 64</span>
+                    <small style={{ color: currentTheme.accent }}>{percentage}% {isBn ? 'চেখেছি' : 'Tasted'}</small>
                   </div>
                 </div>
 
-                {/* Tasted Districts Snippet Tags */}
-                <div className="card-tasted-chips-cloud">
-                  {Array.from(selected).slice(0, 10).map((dId) => (
-                    <span key={dId} className="mini-card-chip" style={{ background: currentTheme.land, color: currentTheme.ink }}>
-                      {dId}
-                    </span>
+                {/* Section Title */}
+                <div className="preview-stamps-header">
+                  <span className="stamps-header-title">
+                    ★ {isBn ? 'আপনার চেখে দেখা খাবারের ভিসা স্ট্যাম্প:' : 'TASTED HERITAGE VISA STAMPS:'}
+                  </span>
+                </div>
+
+                {/* Dynamic Stamp Showcase Grid (What the user actually tasted!) */}
+                <div className="preview-stamps-grid">
+                  {tastedList.slice(0, 6).map((item) => (
+                    <div
+                      key={item.id}
+                      className="preview-food-stamp"
+                      style={{
+                        background: currentTheme.stampBg,
+                        borderColor: currentTheme.border
+                      }}
+                    >
+                      <div className="stamp-top-line">
+                        <span className="stamp-div-tag" style={{ color: currentTheme.accent }}>
+                          {isBn ? item.divisionBn : item.divisionEn}
+                        </span>
+                        {item.primaryFood?.giStatus && (
+                          <span className="stamp-gi-tag">GI 🏅</span>
+                        )}
+                      </div>
+
+                      <div className="stamp-food-row">
+                        <span className="stamp-food-emoji">
+                          {item.primaryFood?.icon || '🍽️'}
+                        </span>
+                        <div className="stamp-food-names">
+                          <strong className="stamp-food-name">
+                            {isBn ? item.primaryFood?.nameBn : item.primaryFood?.nameEn}
+                          </strong>
+                          <span className="stamp-district-name" style={{ color: currentTheme.gold }}>
+                            📍 {isBn ? item.nameBn : item.nameEn}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="stamp-verification-strip">
+                        <Check size={11} />
+                        <span>VERIFIED TASTED</span>
+                      </div>
+                    </div>
                   ))}
-                  {selected.size > 10 && (
-                    <span className="mini-card-chip more-tag" style={{ background: currentTheme.accent, color: '#fff' }}>
-                      +{selected.size - 10} {isBn ? 'অন্যান্য' : 'more'}
-                    </span>
-                  )}
-                  {selected.size === 0 && (
-                    <span className="empty-hint-text">
-                      {isBn ? 'এখনো কোনো জেলা যুক্ত করা হয়নি' : 'No districts tasted yet. Tap on map!'}
-                    </span>
+
+                  {/* Empty state hint if user hasn't tasted yet */}
+                  {tastedList.length === 0 && (
+                    <div className="preview-empty-stamp-prompt">
+                      <span>🧭 {isBn ? 'মানচিত্রে যেকোনো জেলায় ক্লিক করে আপনার স্বাদ পাসপোর্ট রাঙান!' : 'Click any district on the map to add your tasted foods!'}</span>
+                    </div>
                   )}
                 </div>
 
-                {/* Bottom Official Hologram Stamp */}
-                <div className="card-official-seal" style={{ borderColor: currentTheme.dot, color: currentTheme.dot }}>
+                {tastedList.length > 6 && (
+                  <div className="preview-extra-foods-note" style={{ color: currentTheme.gold }}>
+                    + {isBn ? bnDigits(tastedList.length - 6) : tastedList.length - 6} {isBn ? 'অন্যান্য জেলার বিশেষ স্বাদ যুক্ত রয়েছে' : 'more regional foods stamped in HD export'}
+                  </div>
+                )}
+
+                {/* Bottom Hologram Stamp */}
+                <div className="card-official-seal" style={{ borderColor: currentTheme.gold, color: currentTheme.gold }}>
                   <span>✓ VERIFIED ROOTS</span>
                   <small>{isBn ? 'খাঁটি দেশীয় ঐতিহ্য' : 'AUTHENTIC HERITAGE'}</small>
                 </div>
@@ -168,7 +229,7 @@ export default function PassportModal({
             {/* 1. Name & Photo */}
             <div className="control-section-box">
               <h4 className="control-heading">
-                {isBn ? '১. আপনার তথ্য ও ছবি' : '1. Traveler Name & Avatar'}
+                {isBn ? '১. আপনার নাম ও প্রোফাইল ছবি' : '1. Traveler Name & Avatar'}
               </h4>
 
               <div className="avatar-uploader-row">
@@ -212,7 +273,7 @@ export default function PassportModal({
                     )}
                   </div>
                   <span className="avatar-hint">
-                    {isBn ? 'পাসপোর্টের জন্য পাসপোর্ট সাইজ বা স্কয়ার ছবি আদর্শ' : 'Square portrait recommended'}
+                    {isBn ? 'পাসপোর্ট কার্ডে আপনার পাসপোর্ট সাইজ ছবি বসবে' : 'Your avatar appears inside the gold passport seal'}
                   </span>
                 </div>
               </div>
@@ -227,7 +288,7 @@ export default function PassportModal({
                   maxLength={32}
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  placeholder={isBn ? 'যেমন: নাবিল রহমান' : 'e.g. Naimur Rahman'}
+                  placeholder={isBn ? 'যেমন: নাবিল রহমান' : 'e.g. Nabil Rahman'}
                   className="modern-text-input"
                 />
               </div>
