@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
-import DistrictPicker from './components/DistrictPicker.jsx';
 import MapStage from './components/MapStage.jsx';
 import Explorer from './components/Explorer.jsx';
 import Trivia from './components/Trivia.jsx';
 import Footer from './components/Footer.jsx';
 import DistrictModal from './components/DistrictModal.jsx';
+import PassportModal from './components/PassportModal.jsx';
 import { TRANSLATIONS } from './data/translations.js';
 import { DISTRICTS_GEO } from './data/districts-geo.js';
 
-// Default starter tasted districts for visual delight on first load
+// Starter tasted set for immediate visual vibrancy
 const DEFAULT_TASTED = ["BOGURA", "NATORE", "PABNA", "CUMILLA", "CHATTOGRAM", "SYLHET"];
 
 export default function App() {
@@ -46,8 +46,9 @@ export default function App() {
   });
 
   const [modalDistrict, setModalDistrict] = useState(null);
+  const [isPassportOpen, setIsPassportOpen] = useState(false);
 
-  // Sync state to localStorage
+  // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('kyr_lang', lang);
   }, [lang]);
@@ -114,62 +115,80 @@ export default function App() {
     setModalDistrict(null);
   };
 
+  const handleOpenPassport = () => {
+    setIsPassportOpen(true);
+  };
+
+  const handleClosePassport = () => {
+    setIsPassportOpen(false);
+  };
+
   return (
-    <div className="app-root">
-      <Navbar lang={lang} onToggleLang={handleToggleLang} t={t} />
+    <div className="app-root-shell">
+      {/* Sleek Modern Navigation */}
+      <Navbar
+        lang={lang}
+        onToggleLang={handleToggleLang}
+        t={t}
+        tastedCount={selected.size}
+        onOpenPassport={handleOpenPassport}
+      />
 
       <main>
-        <Hero t={t} />
+        {/* Luminous Hero */}
+        <Hero
+          lang={lang}
+          tastedCount={selected.size}
+          onOpenPassport={handleOpenPassport}
+        />
 
-        <section id="mapSection" className="map-stage-section">
-          <div className="container">
-            <div className="map-stage-layout">
-              <DistrictPicker
-                selected={selected}
-                onToggle={handleToggleDistrict}
-                onSelectAll={handleSelectAll}
-                onClearAll={handleClearAll}
-                lang={lang}
-                t={t}
-              />
-              <MapStage
-                selected={selected}
-                onToggleDistrict={handleToggleDistrict}
-                userName={userName}
-                setUserName={setUserName}
-                avatarImg={avatarImg}
-                setAvatarImg={setAvatarImg}
-                themeId={themeId}
-                setThemeId={setThemeId}
-                lang={lang}
-                t={t}
-              />
-            </div>
-          </div>
-        </section>
+        {/* The Centerpiece: Living Vector SVG Map Stage */}
+        <MapStage
+          selected={selected}
+          onToggleDistrict={handleToggleDistrict}
+          onSelectAll={handleSelectAll}
+          onClearAll={handleClearAll}
+          lang={lang}
+          onOpenDetails={handleOpenModal}
+          onOpenPassport={handleOpenPassport}
+        />
 
-        <section id="explorerSection">
-          <Explorer
-            selected={selected}
-            onToggleDistrict={handleToggleDistrict}
-            lang={lang}
-            onOpenModal={handleOpenModal}
-          />
-        </section>
+        {/* Bento Grid Regional Delicacies Explorer */}
+        <Explorer
+          selected={selected}
+          onToggleDistrict={handleToggleDistrict}
+          lang={lang}
+          onOpenModal={handleOpenModal}
+        />
 
-        <section id="triviaSection">
-          <Trivia lang={lang} />
-        </section>
+        {/* Gamified Roots Trivia Arena */}
+        <Trivia lang={lang} />
       </main>
 
-      <Footer lang={lang} />
+      {/* Modern Footer */}
+      <Footer lang={lang} onOpenPassport={handleOpenPassport} />
 
+      {/* Detailed Heritage Lore Modal */}
       <DistrictModal
         district={modalDistrict}
         isOpen={Boolean(modalDistrict)}
         onClose={handleCloseModal}
         isTasted={modalDistrict ? selected.has(modalDistrict.id) : false}
         onToggleTasted={handleToggleDistrict}
+        lang={lang}
+      />
+
+      {/* Dedicated Luxury Taste Passport Modal */}
+      <PassportModal
+        isOpen={isPassportOpen}
+        onClose={handleClosePassport}
+        selected={selected}
+        userName={userName}
+        setUserName={setUserName}
+        avatarImg={avatarImg}
+        setAvatarImg={setAvatarImg}
+        themeId={themeId}
+        setThemeId={setThemeId}
         lang={lang}
       />
     </div>

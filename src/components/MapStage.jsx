@@ -1,384 +1,637 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { DISTRICTS_GEO } from '../data/districts-geo.js';
 import { FOOD_CULTURE_DATA } from '../data/food-culture-data.js';
-import { THEMES, generatePassportCard, triggerCelebrationConfetti } from '../utils/passportCard.js';
+import {
+  Compass,
+  CheckCircle2,
+  PlusCircle,
+  Award,
+  Sparkles,
+  MapPin,
+  Flame,
+  Search,
+  Filter,
+  Eye,
+  RotateCcw,
+  CheckSquare
+} from 'lucide-react';
+
+const ICONIC_BEACONS = [
+  { id: "BOGURA", labelEn: "Bogura Curd", labelBn: "বগুড়ার দই", icon: "🍮" },
+  { id: "PABNA", labelEn: "Pabna Ghee", labelBn: "পাবনার ঘি", icon: "🧈" },
+  { id: "NATORE", labelEn: "Kachagolla", labelBn: "কাঁচাগোল্লা", icon: "🥟" },
+  { id: "CUMILLA", labelEn: "Roshomalai", labelBn: "রসমালাই", icon: "🥣" },
+  { id: "CHATTOGRAM", labelEn: "Mezbani / Kala Bhuna", labelBn: "কালা ভুনা", icon: "🥩" },
+  { id: "SYLHET", labelEn: "7-Layer Tea", labelBn: "সাত রঙের চা", icon: "☕" },
+  { id: "SATKHIRA", labelEn: "Sundarban Honey", labelBn: "খাঁটি মধু", icon: "🍯" },
+  { id: "BARISHAL", labelEn: "Ilish Delicacy", labelBn: "রূপালী ইলিশ", icon: "🐟" },
+  { id: "RAJSHAHI", labelEn: "Fazli Mango", labelBn: "আম ও রেশম", icon: "🥭" },
+  { id: "TANGAIL", labelEn: "Porabari Chamcham", labelBn: "পোড়াবাড়ির চমচম", icon: "🍬" }
+];
+
+const DIVISION_LIST = [
+  { id: "all", en: "All Bangladesh", bn: "পুরো বাংলাদেশ", icon: "🇧🇩" },
+  { id: "Dhaka", en: "Dhaka", bn: "ঢাকা", icon: "🏙️" },
+  { id: "Chattogram", en: "Chattogram", bn: "চট্টগ্রাম", icon: "🌊" },
+  { id: "Rajshahi", en: "Rajshahi", bn: "রাজশাহী", icon: "🥭" },
+  { id: "Khulna", en: "Khulna", bn: "খুলনা", icon: "🐯" },
+  { id: "Barishal", en: "Barishal", bn: "বরিশাল", icon: "⛵" },
+  { id: "Sylhet", en: "Sylhet", bn: "সিলেট", icon: "🍵" },
+  { id: "Rangpur", en: "Rangpur", bn: "রংপুর", icon: "🌾" },
+  { id: "Mymensingh", en: "Mymensingh", bn: "ময়মনসিংহ", icon: "🌿" },
+];
 
 export default function MapStage({
   selected,
   onToggleDistrict,
-  userName,
-  setUserName,
-  avatarImg,
-  setAvatarImg,
-  themeId,
-  setThemeId,
+  onSelectAll,
+  onClearAll,
   lang,
-  t
+  onOpenDetails,
+  onOpenPassport
 }) {
-  const canvasRef = useRef(null);
-  const tooltipRef = useRef(null);
-  const fileInputRef = useRef(null);
-
-  const [showLabels, setShowLabels] = useState(true);
-  const [hoveredDistrict, setHoveredDistrict] = useState(null);
-  const [isExporting, setIsExporting] = useState(false);
-
   const isBn = lang === 'bn';
-  const geoWidth = DISTRICTS_GEO.w || 600;
-  const geoHeight = DISTRICTS_GEO.h || 872;
+  const [activeDivision, setActiveDivision] = useState("all");
+  const [filterTrail, setFilterTrail] = useState("all"); // 'all', 'gi', 'sweet', 'savory'
+  const [hoveredDistrict, setHoveredDistrict] = useState(null);
+  const [spotlightId, setSpotlightId] = useState("BOGURA"); // default spotlight
+  const [searchDistrict, setSearchDistrict] = useState("");
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0, visible: false });
 
-  // Pre-cached Path2D objects
-  const pathsRef = useRef(new Map());
-  const foodMapRef = useRef(new Map());
+  // Quick lookup dictionary for 64 districts data
+  const foodDataMap = useMemo(() => {
+    const map = new Map();
+    FOOD_CULTURE_DATA.forEach((d) => map.set(d.id, d));
+    return map;
+  }, []);
 
-  useEffect(() => {
-    FOOD_CULTURE_DATA.forEach(d => foodMapRef.current.set(d.id, d));
-    DISTRICTS_GEO.f.forEach(f => {
-      pathsRef.current.set(f.n, new Path2D(f.d));
+  const totalCount = 64;
+  const tastedCount = selected.size;
+  const tastedPercentage = Math.round((tastedCount / totalCount) * 100);
+
+  // Compute Rank / Title
+  const getRankTitle = () => {
+    if (tastedCount === 0) return isBn ? "শুরুয়াতি পথিক" : "Aspiring Explorer";
+    if (tastedCount <= 5) return isBn ? "আঞ্চলিক স্বাদ সন্ধানী" : "Regional Wanderer";
+    if (tastedCount <= 15) return isBn ? "অভিজ্ঞ খাদ্যপ্রেমী" : "Heritage Foodie";
+    if (tastedCount <= 30) return isBn ? "বাংলার রসনাবিদ" : "Culinary Connoisseur";
+    if (tastedCount <= 50) return isBn ? "শিকড়ের মহারাজ" : "Master of Roots";
+    return isBn ? "জীবন্ত কিংবদন্তি 👑" : "Living Legend 👑";
+  };
+
+  // Currently spotlighted district object
+  const spotlightDistrict = foodDataMap.get(spotlightId) || FOOD_CULTURE_DATA[0];
+  const isSpotlightTasted = selected.has(spotlightId);
+
+  // SVG Mouse handlers for precise vector interaction
+  const handlePathMouseEnter = (e, f) => {
+    setHoveredDistrict(f);
+    setSpotlightId(f.n);
+    const rect = e.currentTarget.ownerSVGElement.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      visible: true
     });
-  }, []);
-
-  const getTheme = () => THEMES.find(t => t.id === themeId) || THEMES[0];
-
-  // Canvas drawing routine
-  const drawMap = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-    const rect = parent.getBoundingClientRect();
-    const width = rect.width || 600;
-    const height = (width / geoWidth) * geoHeight;
-
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
-
-    const scale = (width / geoWidth) * dpr;
-    const currentTheme = getTheme();
-
-    ctx.save();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.scale(scale, scale);
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-
-    // 1. Draw unselected districts
-    for (const f of DISTRICTS_GEO.f) {
-      if (selected.has(f.n)) continue;
-      const path = pathsRef.current.get(f.n);
-      if (!path) continue;
-      const isHovered = hoveredDistrict && hoveredDistrict.n === f.n;
-
-      ctx.fillStyle = isHovered ? (currentTheme.id === 'midnight' ? '#334155' : '#f0e6d6') : currentTheme.land;
-      ctx.fill(path);
-      ctx.strokeStyle = currentTheme.stroke;
-      ctx.lineWidth = 1.1;
-      ctx.stroke(path);
-    }
-
-    // 2. Gradient for selected districts
-    const grad = ctx.createLinearGradient(0, 0, geoWidth, geoHeight);
-    grad.addColorStop(0, currentTheme.v1);
-    grad.addColorStop(1, currentTheme.v2);
-
-    // Glow for midnight theme
-    if (currentTheme.glow && selected.size > 0) {
-      ctx.save();
-      ctx.shadowColor = currentTheme.glow;
-      ctx.shadowBlur = 18 * dpr;
-      for (const n of selected) {
-        const path = pathsRef.current.get(n);
-        if (path) {
-          ctx.fillStyle = grad;
-          ctx.fill(path);
-        }
-      }
-      ctx.restore();
-    }
-
-    // 3. Draw Selected (Tasted/Explored) Districts
-    for (const n of selected) {
-      const path = pathsRef.current.get(n);
-      if (!path) continue;
-      const isHovered = hoveredDistrict && hoveredDistrict.n === n;
-
-      ctx.fillStyle = grad;
-      ctx.fill(path);
-      ctx.strokeStyle = isHovered ? currentTheme.dot : currentTheme.vStroke;
-      ctx.lineWidth = isHovered ? 2.2 : 1.2;
-      ctx.stroke(path);
-    }
-
-    // 4. Center dots & labels
-    if (showLabels) {
-      const fontName = '"Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif';
-      ctx.font = `600 10.5px ${fontName}`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-
-      for (const f of DISTRICTS_GEO.f) {
-        const isSelected = selected.has(f.n);
-        const isHovered = hoveredDistrict && hoveredDistrict.n === f.n;
-        const [cx, cy] = f.c;
-        const info = foodMapRef.current.get(f.n);
-        const labelText = isBn ? (info?.nameBn || f.n) : (info?.nameEn || f.n);
-
-        if (isSelected || isHovered) {
-          ctx.beginPath();
-          ctx.arc(cx, cy, isHovered ? 4.5 : 3.2, 0, Math.PI * 2);
-          ctx.fillStyle = isHovered ? "#ffeb3b" : currentTheme.dot;
-          ctx.fill();
-          ctx.strokeStyle = "#ffffff";
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          // Text halo
-          ctx.lineWidth = 3.5;
-          ctx.strokeStyle = isSelected ? (currentTheme.id === 'midnight' ? '#0b0f19' : '#ffffff') : currentTheme.halo;
-          ctx.strokeText(labelText, cx, cy - 8.5);
-
-          ctx.fillStyle = isSelected ? (currentTheme.id === 'midnight' ? '#ffffff' : currentTheme.label) : (currentTheme.id === 'midnight' ? '#94a3b8' : '#334155');
-          ctx.fillText(labelText, cx, cy - 8.5);
-        }
-      }
-    }
-
-    ctx.restore();
   };
 
-  useEffect(() => {
-    drawMap();
-  }, [selected, themeId, showLabels, lang, hoveredDistrict]);
-
-  useEffect(() => {
-    const handleResize = () => drawMap();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const handlePointerMove = (e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    const scale = rect.width / geoWidth;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-
-    const x = (clientX - rect.left) / scale;
-    const y = (clientY - rect.top) / scale;
-
-    const ctx = canvas.getContext('2d');
-    let hit = null;
-
-    for (const f of DISTRICTS_GEO.f) {
-      const path = pathsRef.current.get(f.n);
-      if (path && ctx.isPointInPath(path, x * scale * dpr, y * scale * dpr)) {
-        hit = f;
-        break;
-      }
-    }
-
-    if (hit !== hoveredDistrict) {
-      setHoveredDistrict(hit);
-      canvas.style.cursor = hit ? 'pointer' : 'default';
-    }
-
-    const tooltip = tooltipRef.current;
-    if (hit && tooltip) {
-      const info = foodMapRef.current.get(hit.n);
-      const name = isBn ? (info?.nameBn || hit.n) : (info?.nameEn || hit.n);
-      const divName = isBn ? (info?.divisionBn + ' বিভাগ') : (info?.divisionEn + ' Div');
-      const foodName = isBn ? info?.primaryFood?.nameBn : info?.primaryFood?.nameEn;
-      const isTasted = selected.has(hit.n);
-
-      tooltip.innerHTML = `
-        <div class="tt-header">
-          <strong>${name}</strong>
-          <span class="tt-div">${divName}</span>
-        </div>
-        <div class="tt-food">
-          <span class="tt-food-icon">🍽️</span>
-          <span>${foodName || ''}</span>
-        </div>
-        <div class="tt-status ${isTasted ? 'tasted' : ''}">
-          ${isTasted 
-            ? (isBn ? '✓ চেখে দেখেছি' : '✓ Explored & Tasted') 
-            : (isBn ? '+ তালিকায় যোগ করতে ক্লিক করুন' : '+ Tap to Mark Tasted')}
-        </div>
-      `;
-
-      const parentRect = canvas.parentElement.getBoundingClientRect();
-      tooltip.style.left = `${clientX - parentRect.left}px`;
-      tooltip.style.top = `${clientY - parentRect.top}px`;
-      tooltip.classList.add('visible');
-    } else if (tooltip) {
-      tooltip.classList.remove('visible');
-    }
+  const handlePathMouseMove = (e) => {
+    const svgEl = e.currentTarget.ownerSVGElement;
+    if (!svgEl) return;
+    const rect = svgEl.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      visible: true
+    });
   };
 
-  const handlePointerLeave = () => {
+  const handlePathMouseLeave = () => {
     setHoveredDistrict(null);
-    if (tooltipRef.current) tooltipRef.current.classList.remove('visible');
+    setMousePos((prev) => ({ ...prev, visible: false }));
   };
 
-  const handleClick = (e) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const scale = rect.width / geoWidth;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-    const x = (e.clientX - rect.left) / scale;
-    const y = (e.clientY - rect.top) / scale;
-    const ctx = canvas.getContext('2d');
+  const handlePathClick = (f) => {
+    onToggleDistrict(f.n);
+    setSpotlightId(f.n);
+  };
 
-    for (const f of DISTRICTS_GEO.f) {
-      const path = pathsRef.current.get(f.n);
-      if (path && ctx.isPointInPath(path, x * scale * dpr, y * scale * dpr)) {
-        onToggleDistrict(f.n);
-        break;
-      }
+  // Check if a district matches the current trail filter
+  const isDistrictMatched = (districtId, division) => {
+    if (activeDivision !== 'all' && division !== activeDivision) {
+      return false;
     }
-  };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setAvatarImg(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  };
+    const data = foodDataMap.get(districtId);
+    if (!data) return true;
 
-  const handleDownload = async () => {
-    setIsExporting(true);
-    try {
-      await generatePassportCard(userName, avatarImg, selected, themeId, lang);
-      triggerCelebrationConfetti();
-    } catch (err) {
-      console.error("Passport export error:", err);
-    } finally {
-      setIsExporting(false);
+    if (filterTrail === 'gi') {
+      return Boolean(data.primaryFood?.giStatus);
     }
+    if (filterTrail === 'sweet') {
+      return data.primaryFood?.category === 'sweet';
+    }
+    if (filterTrail === 'savory') {
+      return data.primaryFood?.category === 'savory';
+    }
+
+    return true;
   };
 
   return (
-    <div className="stage-main-card">
-      {/* Controls Bar */}
-      <div className="stage-controls-bar">
-        {/* Themes */}
-        <div className="stage-themes">
-          <span className="theme-label">{t.themeLabel}</span>
-          <div className="theme-swatches">
-            {THEMES.map((theme) => (
-              <button
-                key={theme.id}
-                type="button"
-                className={`theme-swatch ${themeId === theme.id ? 'active' : ''}`}
-                style={{
-                  '--c1': theme.v1,
-                  '--c2': theme.v2
-                }}
-                onClick={() => setThemeId(theme.id)}
-                title={isBn ? theme.nameBn : theme.nameEn}
-                aria-label={`Select ${isBn ? theme.nameBn : theme.nameEn} theme`}
-              />
-            ))}
+    <section id="mapSection" className="map-atlas-section">
+      <div className="container">
+        {/* Section Header */}
+        <div className="section-head text-center">
+          <div className="section-pill">
+            <Compass size={15} />
+            <span>{isBn ? 'ইন্টারেক্টিভ ডিজিটাল অ্যাটলাস' : 'Interactive Digital Atlas'}</span>
+          </div>
+          <h2 className="atlas-main-title">
+            {isBn ? (
+              <>
+                ৬৪ জেলার <span className="text-glow">স্বাদ ও ঐতিহ্যের</span> জীবন্ত মানচিত্র
+              </>
+            ) : (
+              <>
+                Living Map of <span className="text-glow">64 Districts</span> & Heritage
+              </>
+            )}
+          </h2>
+          <p className="atlas-sub-title">
+            {isBn
+              ? 'মানচিত্রের যেকোনো জেলায় কার্সর নিয়ে স্বাদ ও ইতিহাস জানুন। ক্লিক করে আপনার তালিকায় যোগ করুন এবং তৈরি করুন হাই-রেজ্যুলেশন ডিজিটাল টেস্ট পাসপোর্ট।'
+              : 'Hover seamlessly over any district polygon to inspect authentic origin lore. Click to toggle your tasted roots and unlock your personalized passport.'}
+          </p>
+        </div>
+
+        {/* Division & Filter Navigation Ribbon */}
+        <div className="division-radar-ribbon">
+          <div className="division-scroll-row">
+            {DIVISION_LIST.map((div) => {
+              const isActive = activeDivision === div.id;
+              return (
+                <button
+                  key={div.id}
+                  type="button"
+                  className={`division-tab-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveDivision(div.id)}
+                >
+                  <span className="div-icon">{div.icon}</span>
+                  <span className="div-name">{isBn ? div.bn : div.en}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Quick Trail Filters */}
+          <div className="trail-filters-row">
+            <span className="trail-label">
+              <Filter size={14} />
+              <span>{isBn ? 'স্পেশাল ট্রেইল:' : 'Special Trails:'}</span>
+            </span>
+
+            <button
+              type="button"
+              className={`trail-btn ${filterTrail === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterTrail('all')}
+            >
+              🌟 {isBn ? 'সকল জেলা (৬৪)' : 'All Districts'}
+            </button>
+            <button
+              type="button"
+              className={`trail-btn ${filterTrail === 'gi' ? 'active' : ''}`}
+              onClick={() => setFilterTrail('gi')}
+            >
+              🏅 {isBn ? 'জিআই সনদপ্রাপ্ত (GI)' : 'GI Certified'}
+            </button>
+            <button
+              type="button"
+              className={`trail-btn ${filterTrail === 'sweet' ? 'active' : ''}`}
+              onClick={() => setFilterTrail('sweet')}
+            >
+              🍯 {isBn ? 'মিষ্টান্ন ও দই ট্রেইল' : 'Sweet Trail'}
+            </button>
+            <button
+              type="button"
+              className={`trail-btn ${filterTrail === 'savory' ? 'active' : ''}`}
+              onClick={() => setFilterTrail('savory')}
+            >
+              🥩 {isBn ? 'মাংস ও মেজবানি পদ' : 'Savory Route'}
+            </button>
           </div>
         </div>
 
-        {/* User Options */}
-        <div className="stage-user-opts">
-          {/* Avatar Upload */}
-          <label className="photo-upload-label" title={t.addPhotoLabel}>
-            <div
-              className={`photo-preview-box ${avatarImg ? 'has-photo' : ''}`}
-              style={avatarImg ? { backgroundImage: `url(${avatarImg})` } : {}}
-            >
-              {!avatarImg && <span>👤</span>}
+        {/* Main Interactive Stage Grid */}
+        <div className="atlas-stage-grid">
+          {/* LEFT: Native Vector SVG Map Box */}
+          <div className="map-viewport-card">
+            <div className="viewport-top-hud">
+              <div className="hud-status-badge">
+                <span className="pulsing-green-dot"></span>
+                <span>
+                  {activeDivision === 'all'
+                    ? (isBn ? 'বাংলাদেশ সম্পূর্ণ দৃশ্যপট' : 'Full Bangladesh Panorama')
+                    : (isBn ? `${activeDivision} বিভাগ হাইলাইট` : `${activeDivision} Division Spotlight`)}
+                </span>
+              </div>
+
+              {/* Fast District Search Input */}
+              <div className="map-quick-search">
+                <Search size={14} className="quick-search-icon" />
+                <input
+                  type="text"
+                  placeholder={isBn ? 'দ্রুত জেলা খুঁজুন...' : 'Find district...'}
+                  value={searchDistrict}
+                  onChange={(e) => {
+                    const q = e.target.value;
+                    setSearchDistrict(q);
+                    if (q.trim()) {
+                      const matched = DISTRICTS_GEO.f.find((f) => {
+                        const d = foodDataMap.get(f.n);
+                        return (
+                          f.n.toLowerCase().includes(q.toLowerCase()) ||
+                          d?.nameBn?.includes(q) ||
+                          d?.nameEn?.toLowerCase().includes(q.toLowerCase())
+                        );
+                      });
+                      if (matched) {
+                        setSpotlightId(matched.n);
+                      }
+                    }
+                  }}
+                  className="quick-search-input"
+                />
+              </div>
             </div>
-            <span>{avatarImg ? (isBn ? 'ছবি পরিবর্তন' : 'Change') : t.addPhotoLabel}</span>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              style={{ display: 'none' }}
-            />
-          </label>
 
-          {avatarImg && (
-            <button
-              type="button"
-              className="btn-tool-link"
-              onClick={() => setAvatarImg(null)}
-              title={t.removePhoto}
-            >
-              ✕
-            </button>
-          )}
+            {/* THE NATIVE SVG MAP */}
+            <div className="svg-map-container">
+              <svg
+                viewBox="0 0 600 872"
+                preserveAspectRatio="xMidYMid meet"
+                className="bangladesh-vector-map"
+              >
+                <defs>
+                  {/* Glowing gradients for tasted districts */}
+                  <linearGradient id="tastedGradEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="100%" stopColor="#047857" />
+                  </linearGradient>
 
-          {/* Name Input */}
-          <input
-            type="text"
-            className="input-user-name"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            placeholder={t.namePlaceholder}
-            maxLength={32}
-            aria-label="Your Name for the passport card"
-          />
+                  <linearGradient id="tastedGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#d97706" />
+                  </linearGradient>
 
-          {/* Show Labels Toggle */}
-          <label className="checkbox-toggle">
-            <input
-              type="checkbox"
-              checked={showLabels}
-              onChange={(e) => setShowLabels(e.target.checked)}
-            />
-            <span>{t.showLabelsLabel}</span>
-          </label>
+                  {/* Drop shadow filter for active district */}
+                  <filter id="activeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="#f59e0b" floodOpacity="0.8" />
+                  </filter>
+                  <filter id="hoverGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#38bdf8" floodOpacity="0.75" />
+                  </filter>
+                </defs>
+
+                {/* 1. Base District Paths */}
+                {DISTRICTS_GEO.f.map((f) => {
+                  const isTasted = selected.has(f.n);
+                  const isHovered = hoveredDistrict && hoveredDistrict.n === f.n;
+                  const isSpotlight = spotlightId === f.n;
+                  const isMatched = isDistrictMatched(f.n, f.dv);
+
+                  let fillColor = '#17362a'; // Default unexplored dark slate
+                  let strokeColor = 'rgba(255, 255, 255, 0.15)';
+                  let strokeWidth = 1.0;
+                  let filterStyle = undefined;
+
+                  if (isTasted) {
+                    fillColor = 'url(#tastedGradEmerald)';
+                    strokeColor = '#34d399';
+                    strokeWidth = 1.3;
+                  }
+
+                  if (!isMatched) {
+                    fillColor = isTasted ? '#064e3b' : '#0d1f18';
+                    strokeColor = 'rgba(255, 255, 255, 0.05)';
+                  }
+
+                  if (isSpotlight) {
+                    strokeColor = '#f59e0b';
+                    strokeWidth = 2.4;
+                    filterStyle = 'url(#activeGlow)';
+                  } else if (isHovered) {
+                    strokeColor = '#38bdf8';
+                    strokeWidth = 2.0;
+                    filterStyle = 'url(#hoverGlow)';
+                  }
+
+                  return (
+                    <path
+                      key={f.n}
+                      id={`svg-district-${f.n}`}
+                      d={f.d}
+                      fill={fillColor}
+                      stroke={strokeColor}
+                      strokeWidth={strokeWidth}
+                      filter={filterStyle}
+                      className={`district-path ${isTasted ? 'is-tasted' : ''} ${isHovered ? 'is-hovered' : ''} ${isSpotlight ? 'is-spotlight' : ''}`}
+                      onMouseEnter={(e) => handlePathMouseEnter(e, f)}
+                      onMouseMove={handlePathMouseMove}
+                      onMouseLeave={handlePathMouseLeave}
+                      onClick={() => handlePathClick(f)}
+                    />
+                  );
+                })}
+
+                {/* 2. Centroid Dots and Labels for Selected / Spotlighted */}
+                {DISTRICTS_GEO.f.map((f) => {
+                  const isTasted = selected.has(f.n);
+                  const isSpotlight = spotlightId === f.n;
+                  const isHovered = hoveredDistrict && hoveredDistrict.n === f.n;
+                  if (!isTasted && !isSpotlight && !isHovered) return null;
+
+                  const [cx, cy] = f.c;
+                  const data = foodDataMap.get(f.n);
+                  const label = isBn ? (data?.nameBn || f.n) : (data?.nameEn || f.n);
+
+                  return (
+                    <g key={`lbl-${f.n}`} className="district-svg-marker" pointerEvents="none">
+                      <circle
+                        cx={cx}
+                        cy={cy}
+                        r={isSpotlight ? 4.8 : 3.4}
+                        fill={isSpotlight ? '#f59e0b' : '#ffffff'}
+                        stroke="#061a14"
+                        strokeWidth={1.5}
+                      />
+                      {/* Crisp Text with Halo */}
+                      <text
+                        x={cx}
+                        y={cy - 9}
+                        textAnchor="middle"
+                        stroke="#061a14"
+                        strokeWidth={3.5}
+                        strokeLinejoin="round"
+                        className="district-svg-text-halo"
+                      >
+                        {label}
+                      </text>
+                      <text
+                        x={cx}
+                        y={cy - 9}
+                        textAnchor="middle"
+                        fill={isSpotlight ? '#fde047' : '#ffffff'}
+                        className="district-svg-text-fill"
+                      >
+                        {label}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* 3. Iconic Delicacy Food Pins (Beacons) */}
+                {ICONIC_BEACONS.map((beacon) => {
+                  const f = DISTRICTS_GEO.f.find((item) => item.n === beacon.id);
+                  if (!f) return null;
+                  const [bx, by] = f.c;
+                  const isTasted = selected.has(beacon.id);
+
+                  return (
+                    <g
+                      key={beacon.id}
+                      className="food-beacon-pin"
+                      transform={`translate(${bx}, ${by})`}
+                      onClick={() => {
+                        setSpotlightId(beacon.id);
+                        onToggleDistrict(beacon.id);
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <circle cx="0" cy="0" r="10" className="beacon-radar-ring" />
+                      <circle
+                        cx="0"
+                        cy="0"
+                        r="8"
+                        fill={isTasted ? '#059669' : '#1e293b'}
+                        stroke="#f59e0b"
+                        strokeWidth="1.4"
+                      />
+                      <text x="0" y="3.5" textAnchor="middle" fontSize="9">
+                        {beacon.icon}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {/* Floating Dynamic Tooltip */}
+              {mousePos.visible && hoveredDistrict && (
+                <div
+                  className="interactive-floating-tooltip"
+                  style={{
+                    left: `${mousePos.x}px`,
+                    top: `${mousePos.y}px`
+                  }}
+                >
+                  <div className="tooltip-head">
+                    <span className="tooltip-name">
+                      {isBn
+                        ? (foodDataMap.get(hoveredDistrict.n)?.nameBn || hoveredDistrict.n)
+                        : (foodDataMap.get(hoveredDistrict.n)?.nameEn || hoveredDistrict.n)}
+                    </span>
+                    <span className="tooltip-div">{hoveredDistrict.dv}</span>
+                  </div>
+                  <div className="tooltip-delicacy">
+                    <span className="delicacy-icon">
+                      {foodDataMap.get(hoveredDistrict.n)?.primaryFood?.icon || '🍽️'}
+                    </span>
+                    <span className="delicacy-title">
+                      {isBn
+                        ? foodDataMap.get(hoveredDistrict.n)?.primaryFood?.nameBn
+                        : foodDataMap.get(hoveredDistrict.n)?.primaryFood?.nameEn}
+                    </span>
+                  </div>
+                  <div className="tooltip-action-prompt">
+                    {selected.has(hoveredDistrict.n) ? (
+                      <span className="status-tasted">✓ {isBn ? 'চেখে দেখেছেন' : 'Tasted'}</span>
+                    ) : (
+                      <span className="status-untasted">+ {isBn ? 'চেখে দেখার জন্য ক্লিক করুন' : 'Click to Mark Tasted'}</span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="map-footer-toolbar">
+              <div className="hint-pill">
+                <span>💡 {isBn ? 'যেকোনো জেলায় ক্লিক করে তালিকায় যুক্ত বা বাদ দিন' : 'Click any district to toggle tasted state'}</span>
+              </div>
+              <div className="bulk-tools">
+                <button type="button" className="btn-hud-tool" onClick={onSelectAll}>
+                  <CheckSquare size={13} />
+                  <span>{isBn ? 'সব বাছাই' : 'Select All'}</span>
+                </button>
+                <button type="button" className="btn-hud-tool" onClick={onClearAll}>
+                  <RotateCcw size={13} />
+                  <span>{isBn ? 'সব মুছুন' : 'Clear All'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: Floating Smart Spotlight Drawer & Progress Radar */}
+          <div className="spotlight-hud-column">
+            {/* 1. Live Roots Progress Radar */}
+            <div className="progress-radar-card">
+              <div className="radar-top">
+                <div className="radar-metric-circle">
+                  <svg viewBox="0 0 100 100" className="radial-svg">
+                    <circle cx="50" cy="50" r="42" className="radial-bg" />
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="42"
+                      className="radial-fill"
+                      style={{
+                        strokeDasharray: 264,
+                        strokeDashoffset: 264 - (264 * tastedPercentage) / 100
+                      }}
+                    />
+                  </svg>
+                  <div className="radial-label-inner">
+                    <span className="radial-number">{tastedCount}</span>
+                    <span className="radial-total">/64</span>
+                  </div>
+                </div>
+
+                <div className="radar-info">
+                  <span className="radar-badge-rank">{getRankTitle()}</span>
+                  <h3 className="radar-stat-title">
+                    {isBn ? `${tastedPercentage}% স্বাদ নেওয়া সম্পন্ন` : `${tastedPercentage}% Explored`}
+                  </h3>
+                  <p className="radar-desc">
+                    {isBn
+                      ? 'যত বেশি জেলার স্বাদ আপনি যুক্ত করবেন, তত সমৃদ্ধ হবে আপনার ডিজিটাল টেস্ট পাসপোর্ট।'
+                      : 'Every district you mark authenticates your journey across Bangladesh.'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Passport Launch CTA */}
+              <button
+                type="button"
+                className="btn-launch-passport-card"
+                onClick={onOpenPassport}
+              >
+                <Award size={18} />
+                <span>{isBn ? 'টেস্ট পাসপোর্ট তৈরি করুন' : 'Generate Taste Passport'}</span>
+                <Sparkles size={16} />
+              </button>
+            </div>
+
+            {/* 2. Real-Time District Spotlight Card */}
+            <div className="district-spotlight-card">
+              <div className="spotlight-card-header">
+                <div className="spotlight-tags">
+                  <span className="division-badge">
+                    {isBn ? `${spotlightDistrict.divisionBn} বিভাগ` : `${spotlightDistrict.divisionEn} Div`}
+                  </span>
+                  {spotlightDistrict.primaryFood?.giStatus && (
+                    <span className="gi-badge">🏅 GI Certified</span>
+                  )}
+                  <span className="category-pill">{spotlightDistrict.primaryFood?.category}</span>
+                </div>
+
+                <div className="spotlight-title-row">
+                  <div>
+                    <h3 className="spotlight-district-name">
+                      {isBn ? spotlightDistrict.nameBn : spotlightDistrict.nameEn}
+                    </h3>
+                    <span className="spotlight-latin-sub">
+                      {isBn ? spotlightDistrict.nameEn : spotlightDistrict.nameBn}
+                    </span>
+                  </div>
+                  <span className="spotlight-hero-icon">
+                    {spotlightDistrict.primaryFood?.icon || '🍽️'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="spotlight-card-body">
+                <div className="delicacy-name-banner">
+                  <Flame size={16} className="flame-icon" />
+                  <h4>{isBn ? spotlightDistrict.primaryFood?.nameBn : spotlightDistrict.primaryFood?.nameEn}</h4>
+                </div>
+
+                <p className="delicacy-desc">
+                  {isBn
+                    ? spotlightDistrict.primaryFood?.descriptionBn
+                    : spotlightDistrict.primaryFood?.descriptionEn}
+                </p>
+
+                {/* Historic Spots */}
+                <div className="spotlight-info-row">
+                  <span className="info-icon">📍</span>
+                  <div className="info-texts">
+                    <strong className="info-title">{isBn ? 'আদি ও খাঁটি স্থান:' : 'Authentic Spots:'}</strong>
+                    <span className="info-val">
+                      {isBn
+                        ? spotlightDistrict.primaryFood?.famousSpotsBn
+                        : spotlightDistrict.primaryFood?.famousSpotsEn}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Cultural Landmark */}
+                {spotlightDistrict.culturalPride && (
+                  <div className="spotlight-info-row">
+                    <span className="info-icon">🏛️</span>
+                    <div className="info-texts">
+                      <strong className="info-title">{isBn ? 'সাংস্কৃতিক গৌরব:' : 'Cultural Pride:'}</strong>
+                      <span className="info-val">
+                        {isBn
+                          ? spotlightDistrict.culturalPride.landmarkBn
+                          : spotlightDistrict.culturalPride.landmarkEn}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="spotlight-card-actions">
+                <button
+                  type="button"
+                  className={`btn-toggle-tasted-main ${isSpotlightTasted ? 'tasted' : ''}`}
+                  onClick={() => onToggleDistrict(spotlightDistrict.id)}
+                >
+                  {isSpotlightTasted ? (
+                    <>
+                      <CheckCircle2 size={18} />
+                      <span>{isBn ? 'তালিকায় যুক্ত হয়েছে (চেখেছি)' : 'Tasted & Explored'}</span>
+                    </>
+                  ) : (
+                    <>
+                      <PlusCircle size={18} />
+                      <span>{isBn ? 'চেখেছি হিসেবে যুক্ত করুন' : 'Mark as Tasted'}</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-open-modal-details"
+                  onClick={() => onOpenDetails(spotlightDistrict)}
+                  title={isBn ? 'সম্পূর্ণ ঐতিহ্য বিবরণী দেখুন' : 'View Full Heritage Lore'}
+                >
+                  <Eye size={17} />
+                  <span>{isBn ? 'বিস্তারিত' : 'Lore'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      {/* Canvas Viewport */}
-      <div className="canvas-container" style={{ background: getTheme().bg }}>
-        <canvas
-          id="mapCanvas"
-          ref={canvasRef}
-          onMouseMove={handlePointerMove}
-          onMouseLeave={handlePointerLeave}
-          onClick={handleClick}
-        />
-        <div ref={tooltipRef} className="map-tooltip" />
-      </div>
-
-      {/* Helper hint */}
-      <p className="stage-helper-hint">{t.mapHint}</p>
-
-      {/* Download Button */}
-      <div className="download-cta-row">
-        <button
-          type="button"
-          className="btn-download-passport"
-          onClick={handleDownload}
-          disabled={isExporting}
-        >
-          {isExporting ? (
-            <span>⏳ {isBn ? 'পাসপোর্ট তৈরি হচ্ছে...' : 'Generating Card...'}</span>
-          ) : (
-            <span>{t.downloadBtn}</span>
-          )}
-        </button>
-      </div>
-    </div>
+    </section>
   );
 }

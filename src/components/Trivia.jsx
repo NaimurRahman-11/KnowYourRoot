@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { triggerCelebrationConfetti } from '../utils/passportCard.js';
+import { Sparkles, Award, RotateCcw, CheckCircle2, XCircle, ArrowRight, Lightbulb } from 'lucide-react';
 
 export const TRIVIA_QUESTIONS = [
   {
@@ -8,7 +9,7 @@ export const TRIVIA_QUESTIONS = [
     optsBn: ["বগুড়া", "পাবনা", "নাটোর", "সিরাজগঞ্জ"],
     optsEn: ["Bogura", "Pabna", "Natore", "Sirajganj"],
     ans: 0,
-    factBn: "বগুড়ার নবাব পরিবারের পৃষ্ঠপোষকতায় শুরু হওয়া এই দই রানী দ্বিতীয় এলিজাবেথকেও উপহার হিসেবে পাঠানো হয়েছিল।",
+    factBn: "বগুড়ার নবাব পরিবারের পৃষ্ঠপোষকতায় শুরু হওয়া এই দই রানী দ্বিতীয় এলিজাবেথকেও উপহার হিসেবে লন্ডনে পাঠানো হয়েছিল।",
     factEn: "Bogura's yogurt gained royal acclaim under the local Nawabs and was even sent to Queen Elizabeth II in London."
   },
   {
@@ -23,7 +24,7 @@ export const TRIVIA_QUESTIONS = [
   {
     qBn: "১৭৫৭ সালে রানী ভবানীর দরবারের কারিগরদের হাতে উদ্ভাবিত বিখ্যাত 'কাঁচাগোল্লা' কোন জেলার?",
     qEn: "Invented around 1757 for Maharani Bhabani's royal court, which district is home to 'Kachagolla'?",
-    optsBn: ["নাটোর", "কুমিল্লা", "টাঙ্গাইল", "যশোর"],
+    optsBn: ["নাটোর", "কুমিল্লা", "टाঙ্গাইল", "যশোর"],
     optsEn: ["Natore", "Cumilla", "Tangail", "Jashore"],
     ans: 0,
     factBn: "নাটোরের মাধব বণিকের মিষ্টির দোকানে এখনো শত বছরের প্রাচীন প্রণালীতে খাঁটি কাঁচাগোল্লা তৈরি হয়।",
@@ -60,7 +61,7 @@ export default function Trivia({ lang }) {
   const currentQ = TRIVIA_QUESTIONS[currentIdx];
 
   const handleSelectOption = (index) => {
-    if (selectedOpt !== null) return; // already answered
+    if (selectedOpt !== null) return;
     setSelectedOpt(index);
     if (index === currentQ.ans) {
       setScore((s) => s + 1);
@@ -85,134 +86,159 @@ export default function Trivia({ lang }) {
   };
 
   return (
-    <section id="trivia-section" className="trivia-section">
+    <section id="triviaSection" className="modern-trivia-section">
       <div className="container">
+        {/* Head */}
         <div className="section-head text-center">
-          <span className="badge-pill">
-            {isBn ? 'স্বাদের কুইজ ও বুদ্ধিমত্তা' : 'Food & Heritage Trivia'}
-          </span>
-          <h2 className="section-title">
-            {isBn ? 'বাংলাদেশের ঐতিহ্যবাহী স্বাদ আপনি কতটা চেনেন?' : 'How Deep Are Your Roots in Bengali Delicacies?'}
+          <div className="section-pill">
+            <Sparkles size={15} />
+            <span>{isBn ? 'স্বাদের বুদ্ধিমত্তা পরীক্ষা' : 'Roots Trivia Challenge'}</span>
+          </div>
+          <h2 className="atlas-main-title">
+            {isBn ? (
+              <>
+                বাংলার খাঁটি স্বাদ আপনি <span className="text-glow">কতটা চেনেন?</span>
+              </>
+            ) : (
+              <>
+                How Deep Are Your <span className="text-glow">Culinary Roots?</span>
+              </>
+            )}
           </h2>
-          <p className="section-subtitle">
+          <p className="atlas-sub-title">
             {isBn
-              ? '৫টি নির্বাচিত আঞ্চলিক প্রশ্নের উত্তর দিয়ে যাচাই করুন আপনার ঐতিহ্য জ্ঞানের দৌড়!'
-              : 'Test your knowledge across 5 heritage questions and earn your Culinary Connoisseur badge.'}
+              ? '৫টি নির্বাচিত ঐতিহ্যবাহী প্রশ্নের উত্তর দিয়ে যাচাই করুন আপনার শেকড়ের জ্ঞান!'
+              : 'Answer 5 curated regional culinary questions and earn your Roots Connoisseur title.'}
           </p>
         </div>
 
-        <div className="trivia-card-container">
+        <div className="trivia-arena-wrapper">
           {!isFinished ? (
-            <div className="trivia-card">
-              {/* Progress & Meta Header */}
-              <div className="trivia-header-row">
-                <span className="trivia-step-badge">
+            <div className="trivia-glass-card">
+              {/* Question Progress Header */}
+              <div className="trivia-card-top-bar">
+                <span className="step-counter-tag">
                   {isBn ? `প্রশ্ন ${currentIdx + 1} / ${total}` : `Question ${currentIdx + 1} of ${total}`}
                 </span>
-                <span className="trivia-score-preview">
+                <span className="current-score-tag">
                   {isBn ? `স্কোর: ${score}` : `Score: ${score}`}
                 </span>
               </div>
 
-              {/* Progress Bar */}
-              <div className="trivia-progress-bar">
+              {/* Progress Line */}
+              <div className="trivia-progress-track">
                 <div
-                  className="trivia-progress-fill"
+                  className="trivia-progress-bar"
                   style={{ width: `${((currentIdx + 1) / total) * 100}%` }}
                 />
               </div>
 
               {/* Question Text */}
-              <h3 className="trivia-question-text">
+              <h3 className="trivia-question-prompt">
                 {isBn ? currentQ.qBn : currentQ.qEn}
               </h3>
 
               {/* Options */}
-              <div className="trivia-options-grid">
+              <div className="trivia-answers-grid">
                 {(isBn ? currentQ.optsBn : currentQ.optsEn).map((opt, idx) => {
-                  let optClass = "trivia-opt-btn";
+                  let optStateClass = "";
+                  let IconComponent = null;
+
                   if (selectedOpt !== null) {
                     if (idx === currentQ.ans) {
-                      optClass += " correct";
+                      optStateClass = "correct-choice";
+                      IconComponent = CheckCircle2;
                     } else if (idx === selectedOpt) {
-                      optClass += " wrong";
+                      optStateClass = "wrong-choice";
+                      IconComponent = XCircle;
                     } else {
-                      optClass += " disabled";
+                      optStateClass = "muted-choice";
                     }
                   }
 
                   return (
                     <button
                       key={idx}
-                      className={optClass}
+                      type="button"
+                      className={`trivia-option-card ${optStateClass}`}
                       onClick={() => handleSelectOption(idx)}
                       disabled={selectedOpt !== null}
                     >
-                      <span className="opt-letter">{String.fromCharCode(65 + idx)}</span>
-                      <span className="opt-text">{opt}</span>
+                      <span className="option-letter">{String.fromCharCode(65 + idx)}</span>
+                      <span className="option-text-val">{opt}</span>
+                      {IconComponent && <IconComponent size={20} className="option-feedback-icon" />}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Did you know / Fact Box */}
+              {/* Did you know Fact Box */}
               {selectedOpt !== null && (
-                <div className="trivia-fact-box">
-                  <span className="fact-icon">💡</span>
-                  <div className="fact-content">
-                    <strong>{isBn ? 'আপনি কি জানেন?' : 'Heritage Fact:'}</strong>
+                <div className="trivia-lore-box">
+                  <Lightbulb size={22} className="lore-bulb-icon" />
+                  <div className="lore-text-content">
+                    <strong className="lore-heading">
+                      {isBn ? 'আপনি কি জানেন?' : 'Heritage Lore Insight:'}
+                    </strong>
                     <p>{isBn ? currentQ.factBn : currentQ.factEn}</p>
                   </div>
                 </div>
               )}
 
-              {/* Next Button */}
+              {/* Next Action */}
               {selectedOpt !== null && (
-                <div className="trivia-next-action">
-                  <button className="btn-primary btn-large" onClick={handleNext}>
-                    {currentIdx + 1 < total
-                      ? (isBn ? 'পরবর্তী প্রশ্ন ➔' : 'Next Question ➔')
-                      : (isBn ? 'ফলাফল দেখুন 🎉' : 'View Results 🎉')}
+                <div className="trivia-advance-row">
+                  <button type="button" className="btn-trivia-next" onClick={handleNext}>
+                    <span>
+                      {currentIdx + 1 < total
+                        ? (isBn ? 'পরবর্তী প্রশ্ন' : 'Next Question')
+                        : (isBn ? 'ফলাফল দেখুন' : 'Show My Score')}
+                    </span>
+                    <ArrowRight size={17} />
                   </button>
                 </div>
               )}
             </div>
           ) : (
-            <div className="trivia-result-card text-center">
-              <div className="result-trophy">🏆</div>
-              <h3 className="result-title">
-                {isBn ? 'অভিনন্দন! কুইজ সমাপ্ত' : 'Challenge Complete!'}
+            <div className="trivia-celebration-card text-center">
+              <div className="celebration-trophy-ring">
+                <Award size={48} className="trophy-gold-icon" />
+              </div>
+
+              <h3 className="celebration-heading">
+                {isBn ? 'চ্যালেঞ্জ সম্পন্ন!' : 'Trivia Conquered!'}
               </h3>
-              <p className="result-score-line">
+              <p className="celebration-score-lead">
                 {isBn
                   ? `আপনি ৫ টির মধ্যে ${score} টি সঠিক উত্তর দিয়েছেন!`
-                  : `You scored ${score} out of ${total}!`}
+                  : `You got ${score} out of ${total} correct answers!`}
               </p>
 
-              <div className="result-badge-display">
+              <div className="connoisseur-badge-wrap">
                 {score === 5 && (
-                  <div className="badge-level gold">
-                    <span>👑 {isBn ? 'খাঁটি রসনাবিদ ও ঐতিহ্যপ্রেমী' : 'Master Culinary Connoisseur'}</span>
+                  <div className="connoisseur-badge gold">
+                    👑 {isBn ? 'খাঁটি রসনাবিদ ও ঐতিহ্য পণ্ডিত' : 'Grand Master Culinary Connoisseur'}
                   </div>
                 )}
                 {score >= 3 && score < 5 && (
-                  <div className="badge-level silver">
-                    <span>🌟 {isBn ? 'অভিজ্ঞ ঐতিহ্য সন্ধানী' : 'Seasoned Heritage Explorer'}</span>
+                  <div className="connoisseur-badge silver">
+                    🌟 {isBn ? 'অভিজ্ঞ ঐতিহ্য পর্যটক' : 'Seasoned Heritage Explorer'}
                   </div>
                 )}
                 {score < 3 && (
-                  <div className="badge-level bronze">
-                    <span>🌱 {isBn ? 'আঞ্চলিক স্বাদের নতুন পথিক' : 'Curious Culinary Apprentice'}</span>
+                  <div className="connoisseur-badge bronze">
+                    🌱 {isBn ? 'আঞ্চলিক স্বাদের কৌতূহলী শিক্ষানবিস' : 'Curious Culinary Apprentice'}
                   </div>
                 )}
               </div>
 
-              <div className="result-actions">
-                <button className="btn-primary" onClick={handleRestart}>
-                  🔄 {isBn ? 'পুনরায় কুইজ দিন' : 'Play Again'}
+              <div className="celebration-actions-row">
+                <button type="button" className="btn-trivia-retry" onClick={handleRestart}>
+                  <RotateCcw size={17} />
+                  <span>{isBn ? 'পুনরায় খেলুন' : 'Try Again'}</span>
                 </button>
-                <a href="#map-section" className="btn-secondary">
-                  🗺️ {isBn ? 'মানচিত্রে ফিরে যান' : 'Back to Heritage Map'}
+                <a href="#mapSection" className="btn-trivia-to-map">
+                  <span>{isBn ? 'মানচিত্রে ফিরে যান' : 'Back to Atlas'}</span>
                 </a>
               </div>
             </div>

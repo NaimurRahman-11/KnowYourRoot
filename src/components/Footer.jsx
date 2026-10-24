@@ -1,67 +1,71 @@
 import React from 'react';
+import { Compass, Heart, MapPin, Award, ExternalLink, Code2 } from 'lucide-react';
 
-export default function Footer({ lang }) {
+export default function Footer({ lang, onOpenPassport }) {
   const isBn = lang === 'bn';
 
   return (
-    <footer className="site-footer">
+    <footer className="modern-footer">
       <div className="container">
-        <div className="footer-grid">
-          <div className="footer-col brand-col">
-            <div className="footer-logo">
-              <span className="logo-icon">🌿</span>
-              <span className="logo-text">KnowYourRoot</span>
+        <div className="footer-main-grid">
+          {/* Brand Col */}
+          <div className="footer-brand-pane">
+            <div className="footer-brand-logo">
+              <div className="footer-logo-gem">
+                <Compass size={20} />
+              </div>
+              <span className="footer-brand-text">KnowYourRoot</span>
             </div>
-            <p className="footer-tagline">
+            <p className="footer-mission-statement">
               {isBn
-                ? 'বাংলার ৬৪ জেলার বিলুপ্তপ্রায় ঐতিহ্য, শতাব্দীপ্রাচীন স্বাদ ও ভৌগোলিক নির্দেশক (GI) পণ্যের এক জীবন্ত ডিজিটাল কোষাগার।'
-                : 'A living digital tribute to the indigenous gastronomy, cultural heritage, and GI treasures across all 64 districts of Bangladesh.'}
+                ? 'বাংলার ৬৪ জেলার সুপ্রাচীন খাদ্যাভ্যাস, জিআই সনদপ্রাপ্ত সম্পদ ও ভৌগোলিক সংস্কৃতির এক জীবন্ত ডিজিটাল কোষাগার।'
+                : 'A living digital atlas honoring the indigenous gastronomy, centuries-old artisan traditions, and GI heritage across Bangladesh.'}
             </p>
-            <div className="social-links">
-              <a href="https://github.com/NaimurRahman-11/KnowYourRoot" target="_blank" rel="noreferrer" className="social-chip">
-                GitHub ↗
-              </a>
-              <a href="#map-section" className="social-chip">
-                {isBn ? 'মানচিত্র' : 'Map'}
-              </a>
-              <a href="#explorer-section" className="social-chip">
-                {isBn ? 'স্বাদভাণ্ডার' : 'Explorer'}
-              </a>
-              <a href="#trivia-section" className="social-chip">
-                {isBn ? 'কুইজ' : 'Trivia'}
+            <div className="footer-social-strip">
+              <a
+                href="https://github.com/NaimurRahman-11/KnowYourRoot"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link-chip"
+              >
+                <Code2 size={16} />
+                <span>GitHub Repository</span>
+                <ExternalLink size={12} />
               </a>
             </div>
           </div>
 
-          <div className="footer-col">
-            <h4 className="footer-heading">{isBn ? 'জনপ্রিয় স্বাদ' : 'Iconic Signatures'}</h4>
-            <ul className="footer-links">
-              <li><span>{isBn ? 'বগুড়ার মিষ্টি দই' : "Bogura's Misti Doi"}</span></li>
-              <li><span>{isBn ? 'নাটোরের কাঁচাগোল্লা' : "Natore's Kachagolla"}</span></li>
-              <li><span>{isBn ? 'পাবনার গাওয়া ঘি' : "Pabna's Gawa Ghee"}</span></li>
-              <li><span>{isBn ? 'কুমিল্লার রসমালাই' : "Cumilla's Roshomalai"}</span></li>
-              <li><span>{isBn ? 'মুক্তাগাছার মণ্ডা' : "Muktagacha's Monda"}</span></li>
+
+          {/* Quick Links */}
+          <div className="footer-col-nav">
+            <h4 className="footer-col-title">{isBn ? 'ন্যাভিগেশন' : 'Navigation'}</h4>
+            <ul className="footer-links-list">
+              <li><a href="#mapSection">{isBn ? 'ইন্টারেক্টিভ মানচিত্র' : 'Interactive Atlas'}</a></li>
+              <li><a href="#explorerSection">{isBn ? '৬৪ জেলার ঐতিহ্য' : 'Heritage Vault'}</a></li>
+              <li><a href="#triviaSection">{isBn ? 'স্বাদ কুইজ চ্যালেঞ্জ' : 'Trivia Arena'}</a></li>
+              <li><button type="button" className="footer-text-btn" onClick={onOpenPassport}>{isBn ? 'টেস্ট পাসপোর্ট' : 'Taste Passport'}</button></li>
             </ul>
           </div>
 
-          <div className="footer-col">
-            <h4 className="footer-heading">{isBn ? 'ভৌগোলিক নির্দেশক (GI)' : 'GI Recognition'}</h4>
-            <ul className="footer-links">
-              <li><span>{isBn ? 'টাঙ্গাইল শাড়ি ও পোড়াবাড়ির চমচম' : "Tangail Saree & Chamcham"}</span></li>
-              <li><span>{isBn ? 'রাজশাহীর আম ও রেশম' : "Rajshahi Silk & Mangoes"}</span></li>
-              <li><span>{isBn ? 'দিনাজপুরের কাটারিভোগ ও লিচু' : "Dinajpur Kataribhog & Litchi"}</span></li>
-              <li><span>{isBn ? 'সুন্দরবনের প্রাকৃতিক মধু' : "Sundarbans Wild Forest Honey"}</span></li>
-              <li><span>{isBn ? 'কিশোরগঞ্জের অষ্টগ্রাম পনির' : "Austagram Artisanal Cheese"}</span></li>
+          {/* Iconic GI Heritage */}
+          <div className="footer-col-nav">
+            <h4 className="footer-col-title">{isBn ? 'স্বীকৃত জিআই ঐতিহ্য' : 'Iconic GI Delicacies'}</h4>
+            <ul className="footer-links-list">
+              <li><span>{isBn ? 'বগুড়ার মিষ্টি দই' : "Bogura's Misti Doi"}</span></li>
+              <li><span>{isBn ? 'নাটোরের কাঁচাগোল্লা' : "Natore's Kachagolla"}</span></li>
+              <li><span>{isBn ? 'কুমিল্লার রসমালাই' : "Cumilla's Roshomalai"}</span></li>
+              <li><span>{isBn ? 'টাঙ্গাইলের পোড়াবাড়ির চমচম' : "Tangail's Chamcham"}</span></li>
+              <li><span>{isBn ? 'সুন্দরবনের প্রাকৃতিক মধু' : "Sundarbans Wild Honey"}</span></li>
             </ul>
           </div>
         </div>
 
-        <div className="footer-bottom">
-          <p>
-            © {new Date().getFullYear()} KnowYourRoot. {isBn ? 'সকল অধিকার সংরক্ষিত। ভালোবাসা ও শ্রদ্ধায় তৈরি।' : 'All rights reserved. Crafted with deep cultural reverence.'}
+        <div className="footer-bottom-bar">
+          <p className="footer-copy">
+            © {new Date().getFullYear()} KnowYourRoot. {isBn ? 'বাংলাদেশি খাদ্য ও সংস্কৃতির পরম মমতায় নির্মিত।' : 'Crafted with cultural pride and reverence for Bangladesh.'}
           </p>
-          <p className="footer-subtext">
-            {isBn ? 'বাংলাদেশি খাদ্য ও সংস্কৃতির জয়গান।' : 'Celebrating the vibrant heart of Bangladesh.'}
+          <p className="footer-love-note">
+            <span>{isBn ? 'আপনার শিকড় জানুন, বাংলার স্বাদ বাঁচিয়ে রাখুন' : 'Know Your Roots, Savor Bengal'}</span>
           </p>
         </div>
       </div>

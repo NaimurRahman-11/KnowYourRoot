@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
+import { X, Award, MapPin, Check, Plus, BookOpen, Sparkles } from 'lucide-react';
 
-export default function DistrictModal({ district, isOpen, onClose, isTasted, onToggleTasted, lang }) {
+export default function DistrictModal({
+  district,
+  isOpen,
+  onClose,
+  isTasted,
+  onToggleTasted,
+  lang
+}) {
   const isBn = lang === 'bn';
 
   useEffect(() => {
@@ -25,7 +33,6 @@ export default function DistrictModal({ district, isOpen, onClose, isTasted, onT
     nameBn,
     divisionEn,
     divisionBn,
-    heritageScore,
     primaryFood,
     secondaryItems,
     culturalPride
@@ -35,101 +42,126 @@ export default function DistrictModal({ district, isOpen, onClose, isTasted, onT
   const divisionName = isBn ? `${divisionBn} বিভাগ` : `${divisionEn} Division`;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        {/* Modal Header */}
-        <div className="modal-header">
-          <div className="modal-header-titles">
-            <span className="modal-division-badge">{divisionName}</span>
-            <h3 className="modal-district-title">{districtName}</h3>
+    <div className="modern-modal-backdrop" onClick={onClose}>
+      <div className="modern-modal-card" onClick={(e) => e.stopPropagation()}>
+        {/* Header with Glowing Division Accent */}
+        <div className="modal-top-banner">
+          <div className="modal-title-area">
+            <span className="modal-division-chip">{divisionName}</span>
+            <h3 className="modal-hero-district">{districtName}</h3>
+            <span className="modal-alt-district">{isBn ? nameEn : nameBn}</span>
           </div>
-          <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
-            ✕
+
+          <button className="modal-close-icon-btn" onClick={onClose} aria-label="Close modal">
+            <X size={20} />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="modal-body">
-          {/* Primary Food Highlight Box */}
-          <div className="primary-food-card">
-            <div className="primary-food-header">
-              <span className="primary-food-icon">{primaryFood.icon || '🍽️'}</span>
-              <div className="primary-food-meta">
-                <div className="primary-food-tag">
+        <div className="modal-scroll-body">
+          {/* Primary Delicacy Showcase Card */}
+          <div className="showcase-delicacy-card">
+            <div className="showcase-header-row">
+              <span className="showcase-large-icon">{primaryFood.icon || '🍽️'}</span>
+              <div className="showcase-delicacy-title-box">
+                <div className="showcase-badges">
                   {primaryFood.giStatus && (
-                    <span className="gi-badge">🏅 {isBn ? 'জিআই সনদপ্রাপ্ত ঐতিহ্য' : 'Official GI Certified'}</span>
+                    <span className="showcase-gi-pill">
+                      <Award size={13} />
+                      <span>{isBn ? 'ভৌগোলিক নির্দেশক (জিআই)' : 'Official GI Certified'}</span>
+                    </span>
                   )}
-                  <span className="category-badge">{primaryFood.category}</span>
+                  <span className="showcase-cat-pill">{primaryFood.category}</span>
                 </div>
-                <h4 className="primary-food-name">
+                <h4 className="showcase-food-name">
                   {isBn ? primaryFood.nameBn : primaryFood.nameEn}
                 </h4>
               </div>
             </div>
 
-            <p className="primary-food-desc">
+            <p className="showcase-desc">
               {isBn ? primaryFood.descriptionBn : primaryFood.descriptionEn}
             </p>
 
-            {/* Origin & Authenticity */}
-            <div className="food-detail-grid">
-              <div className="food-detail-item">
-                <span className="detail-label">📜 {isBn ? 'ঐতিহাসিক পটভূমি' : 'Heritage Origin'}</span>
-                <span className="detail-value">{isBn ? primaryFood.originBn : primaryFood.originEn}</span>
+            {/* Historical Origin & Historic Shops Grid */}
+            <div className="showcase-details-grid">
+              <div className="detail-box">
+                <div className="detail-box-head">
+                  <BookOpen size={15} />
+                  <span>{isBn ? 'ঐতিহাসিক প্রেক্ষাপট' : 'Heritage & Origin Story'}</span>
+                </div>
+                <p className="detail-box-content">
+                  {isBn ? primaryFood.originBn : primaryFood.originEn}
+                </p>
               </div>
-              <div className="food-detail-item">
-                <span className="detail-label">📍 {isBn ? 'আদি ও খাঁটি স্থান' : 'Authentic Shops & Spots'}</span>
-                <span className="detail-value">{isBn ? primaryFood.famousSpotsBn : primaryFood.famousSpotsEn}</span>
+
+              <div className="detail-box">
+                <div className="detail-box-head">
+                  <MapPin size={15} />
+                  <span>{isBn ? 'আদি ও খাঁটি স্থান' : 'Authentic Shops & Masters'}</span>
+                </div>
+                <p className="detail-box-content highlight-spot">
+                  {isBn ? primaryFood.famousSpotsBn : primaryFood.famousSpotsEn}
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Secondary Famous Delicacies */}
+          {/* Secondary Regional Specialties */}
           {secondaryItems && secondaryItems.length > 0 && (
-            <div className="secondary-foods-section">
-              <h5 className="section-label">
-                ✨ {isBn ? 'অন্যান্য বিখ্যাত আঞ্চলিক স্বাদ' : 'Other Regional Specialties'}
+            <div className="modal-sub-section">
+              <h5 className="sub-section-title">
+                <Sparkles size={16} />
+                <span>{isBn ? 'জেলার অন্যান্য জনপ্রিয় স্বাদ' : 'Other Renowned Regional Tastes'}</span>
               </h5>
-              <div className="secondary-chips-row">
+              <div className="modal-secondary-chips-row">
                 {secondaryItems.map((sec, idx) => (
-                  <div key={idx} className="secondary-chip">
-                    <span className="chip-name">{isBn ? sec.nameBn : sec.nameEn}</span>
-                    <span className="chip-type">{sec.type}</span>
+                  <div key={idx} className="modal-secondary-chip">
+                    <span className="sec-chip-name">{isBn ? sec.nameBn : sec.nameEn}</span>
+                    <span className="sec-chip-type">{sec.type}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Cultural Pride & Landmark */}
+          {/* Cultural Landmark */}
           {culturalPride && (
-            <div className="cultural-pride-box">
-              <h5 className="section-label">
-                🏛️ {isBn ? 'সাংস্কৃতিক গৌরব ও দর্শনীয় স্থান' : 'Cultural Pride & Landmark'}
+            <div className="modal-sub-section landmark-section">
+              <h5 className="sub-section-title">
+                🏛️ <span>{isBn ? 'সাংস্কৃতিক গৌরব ও স্মৃতিচিহ্ন' : 'Cultural Pride & Landmark'}</span>
               </h5>
-              <p className="cultural-landmark">
-                <strong>{isBn ? culturalPride.landmarkBn : culturalPride.landmarkEn}</strong>
+              <p className="landmark-title">
+                {isBn ? culturalPride.landmarkBn : culturalPride.landmarkEn}
               </p>
-              <p className="cultural-summary">
+              <p className="landmark-desc">
                 {isBn ? culturalPride.summaryBn : culturalPride.summaryEn}
               </p>
             </div>
           )}
         </div>
 
-        {/* Modal Footer */}
-        <div className="modal-footer">
+        {/* Modal Footer Actions */}
+        <div className="modal-bottom-bar">
           <button
-            className={`btn-tasted-modal ${isTasted ? 'tasted' : ''}`}
+            type="button"
+            className={`btn-modal-taste-toggle ${isTasted ? 'active' : ''}`}
             onClick={() => onToggleTasted(id)}
           >
             {isTasted ? (
-              <span>✓ {isBn ? 'চেখে দেখেছি (তালিকায় যুক্ত)' : 'Tasted & Explored'}</span>
+              <>
+                <Check size={18} />
+                <span>{isBn ? 'স্বাদ গ্রহণ সম্পন্ন (তালিকায় রয়েছে)' : 'Tasted & Added to Roots'}</span>
+              </>
             ) : (
-              <span>+ {isBn ? 'চেখে দেখার তালিকায় যোগ করুন' : 'Mark as Tasted'}</span>
+              <>
+                <Plus size={18} />
+                <span>{isBn ? 'স্বাদ গ্রহণ তালিকায় যোগ করুন' : 'Add to Tasted Roots'}</span>
+              </>
             )}
           </button>
-          <button className="btn-secondary" onClick={onClose}>
+
+          <button type="button" className="btn-modal-dismiss" onClick={onClose}>
             {isBn ? 'বন্ধ করুন' : 'Close'}
           </button>
         </div>
