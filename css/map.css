@@ -1,0 +1,473 @@
+/* ==========================================================================
+   KnowYourRoot - Interactive Map & Taste Tracker Styles
+   ========================================================================== */
+
+.map-stage-section {
+  margin-bottom: 64px;
+}
+
+.map-stage-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 390px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* ==========================================================================
+   Sidebar: District Picker
+   ========================================================================== */
+
+.picker-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 90px;
+  max-height: calc(100vh - 110px);
+  display: flex;
+  flex-direction: column;
+}
+
+.picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.picker-header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.counter-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-variant-numeric: tabular-nums;
+}
+
+.picker-search {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.picker-search input {
+  width: 100%;
+  border: 1.5px solid var(--line-subtle);
+  background: var(--bg-page);
+  border-radius: var(--radius-md);
+  padding: 10px 14px 10px 38px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.picker-search input:focus {
+  border-color: var(--brand-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(15, 107, 79, 0.12);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.picker-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.btn-tool-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+
+.btn-tool-link:hover {
+  color: var(--brand-primary);
+}
+
+.picker-list-scroll {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 4px;
+  margin-right: -4px;
+}
+
+.picker-list-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+
+.picker-list-scroll::-webkit-scrollbar-thumb {
+  background: #e2dbce;
+  border-radius: 99px;
+}
+
+.div-group {
+  margin-bottom: 16px;
+}
+
+.div-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13.5px;
+}
+
+.div-group-header strong {
+  color: var(--ink-secondary);
+}
+
+.div-count-tag {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-muted);
+  background: var(--bg-chip);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.div-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.district-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--line-subtle);
+  background: var(--bg-chip);
+  color: var(--ink-primary);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.district-chip:hover {
+  border-color: var(--brand-primary-light);
+  background: var(--brand-primary-soft);
+  transform: translateY(-1px);
+}
+
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  transition: all 0.2s;
+}
+
+.district-chip.active {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 2px 6px rgba(15, 107, 79, 0.25);
+}
+
+.district-chip.active .chip-dot {
+  background: #ffffff;
+}
+
+/* ==========================================================================
+   Stage Main: Map Canvas & Controls
+   ========================================================================== */
+
+.stage-main-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+.stage-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--line-subtle);
+}
+
+.stage-themes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-secondary);
+}
+
+.theme-swatches {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  cursor: pointer;
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.theme-swatch:hover {
+  transform: scale(1.1);
+}
+
+.theme-swatch.active {
+  outline-color: var(--ink-primary);
+  transform: scale(1.12);
+}
+
+.stage-user-opts {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.photo-upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius-full);
+  padding: 4px 14px 4px 5px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.photo-upload-label:hover {
+  border-color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+}
+
+.photo-preview-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-chip);
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.photo-preview-box.has-photo {
+  border: 1.5px solid var(--brand-primary);
+}
+
+.input-user-name {
+  border: 1.5px solid var(--line-subtle);
+  background: var(--bg-page);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  min-width: 170px;
+  transition: all 0.2s;
+}
+
+.input-user-name:focus {
+  border-color: var(--brand-primary);
+  background: #ffffff;
+}
+
+.checkbox-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-toggle input {
+  accent-color: var(--brand-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Canvas Box & Interactive Tooltip
+   ========================================================================== */
+
+.canvas-container {
+  position: relative;
+  background: #fdfbf7;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--line-subtle);
+  margin-bottom: 18px;
+}
+
+canvas#mapCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.map-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(15, 23, 42, 0.94);
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, -125%);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  z-index: 50;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.map-tooltip.visible {
+  opacity: 1;
+}
+
+.tt-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tt-header strong {
+  font-size: 14.5px;
+}
+
+.tt-div {
+  font-size: 11px;
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1px 7px;
+  border-radius: 99px;
+}
+
+.tt-food {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #ffd166;
+  font-size: 13.5px;
+  margin-bottom: 4px;
+}
+
+.tt-status {
+  font-size: 11.5px;
+  opacity: 0.85;
+}
+
+.tt-status.tasted {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+.stage-helper-hint {
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.download-cta-row {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-download-passport {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 320px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-light));
+  color: #ffffff;
+  padding: 15px 32px;
+  border: 0;
+  border-radius: var(--radius-full);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(15, 107, 79, 0.35);
+  transition: all 0.22s ease;
+}
+
+.btn-download-passport:hover {
+  background: linear-gradient(135deg, #0b4e39, var(--brand-primary));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(15, 107, 79, 0.45);
+}
+
+.btn-download-passport:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .map-stage-layout {
+    grid-template-columns: 1fr;
+  }
+  .picker-card {
+    position: static;
+    max-height: 480px;
+  }
+}

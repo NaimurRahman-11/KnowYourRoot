@@ -1,0 +1,553 @@
+/* ==========================================================================
+   KnowYourRoot - Regional Food & Culture Explorer Styles
+   ========================================================================== */
+
+.explorer-section {
+  padding: 48px 0 64px;
+}
+
+.section-head {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 36px;
+}
+
+.section-head h2 {
+  font-size: clamp(28px, 4vw, 42px);
+  margin-bottom: 12px;
+}
+
+.section-head h2 span {
+  color: var(--brand-primary);
+}
+
+.section-head p {
+  color: var(--ink-secondary);
+  font-size: 16.5px;
+}
+
+/* ==========================================================================
+   Explorer Filter Controls
+   ========================================================================== */
+
+.explorer-controls-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--line-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.explorer-filter-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.explorer-search-wrap {
+  flex: 1;
+  min-width: 260px;
+  position: relative;
+}
+
+.explorer-search-wrap input {
+  width: 100%;
+  border: 1.5px solid var(--line-subtle);
+  background: var(--bg-page);
+  border-radius: var(--radius-full);
+  padding: 11px 18px 11px 42px;
+  font-size: 14.5px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.explorer-search-wrap input:focus {
+  border-color: var(--brand-primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(15, 107, 79, 0.12);
+}
+
+.explorer-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.division-select-wrap select {
+  border: 1.5px solid var(--line-subtle);
+  background: var(--bg-page);
+  border-radius: var(--radius-full);
+  padding: 10px 20px;
+  font-size: 14.5px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  color: var(--ink-primary);
+}
+
+.division-select-wrap select:focus {
+  border-color: var(--brand-primary);
+}
+
+.cat-chips-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.cat-chips-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.cat-chips-scroll::-webkit-scrollbar-thumb {
+  background: #e2dbce;
+  border-radius: 99px;
+}
+
+.cat-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--line-subtle);
+  background: var(--bg-chip);
+  color: var(--ink-secondary);
+  border-radius: var(--radius-full);
+  padding: 7px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.cat-chip:hover {
+  border-color: var(--brand-primary-light);
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
+}
+
+.cat-chip.active {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary);
+}
+
+/* ==========================================================================
+   Food Cards Grid
+   ========================================================================== */
+
+.explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.food-card {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--line-subtle);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.22s ease;
+  cursor: pointer;
+}
+
+.food-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--brand-primary-light);
+}
+
+.food-card.is-tasted {
+  border-color: rgba(15, 107, 79, 0.4);
+  background: linear-gradient(180deg, #ffffff 0%, #f4faf6 100%);
+}
+
+.fc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.fc-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-district {
+  font-weight: 800;
+  font-size: 18px;
+  font-family: var(--font-heading);
+  color: var(--ink-primary);
+}
+
+.fc-division {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.gi-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #854d0e;
+  background: #fef08a;
+  border: 1px solid #fde047;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.fc-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fc-food-title {
+  font-size: 19px;
+  color: var(--brand-terracotta);
+  margin-bottom: 8px;
+}
+
+.fc-food-desc {
+  font-size: 14.5px;
+  color: var(--ink-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.fc-meta {
+  margin-top: auto;
+  margin-bottom: 14px;
+}
+
+.fc-spots {
+  font-size: 13px;
+  background: var(--bg-page);
+  border: 1px solid var(--line-subtle);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.fc-spots .fc-label {
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.fc-spots .fc-val {
+  color: var(--ink-secondary);
+}
+
+.fc-secondary-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.sec-chip {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  background: var(--bg-chip);
+  border-radius: 99px;
+  padding: 2px 9px;
+}
+
+.fc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line-subtle);
+}
+
+.btn-toggle-tasted {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--ink-secondary);
+}
+
+.btn-toggle-tasted:hover {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+.btn-toggle-tasted.active {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: #ffffff;
+}
+
+.btn-card-details {
+  border: 0;
+  background: none;
+  color: var(--brand-primary);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-card-details:hover {
+  color: #0b4e39;
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 20px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--line-strong);
+}
+
+.empty-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+}
+
+.empty-state h3 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+.empty-state p {
+  color: var(--ink-muted);
+  font-size: 15px;
+}
+
+/* ==========================================================================
+   Detail Modal / Drawer
+   ========================================================================== */
+
+.district-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+
+.district-modal.active {
+  display: grid;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.modal-dialog {
+  position: relative;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line-subtle);
+  overflow: hidden;
+  animation: modalPopIn 0.22s ease-out;
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.modal-header {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--line-subtle);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line-subtle);
+  background: var(--bg-page);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--ink-muted);
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  color: var(--ink-primary);
+  background: var(--bg-chip);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-district-header {
+  border-bottom: 1px solid var(--line-subtle);
+  padding-bottom: 16px;
+}
+
+.mdh-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.mdh-pill {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.gi-badge-modal {
+  font-size: 12px;
+  font-weight: 700;
+  color: #854d0e;
+  background: #fef08a;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.modal-district-header h2 {
+  font-size: 32px;
+  margin-bottom: 4px;
+}
+
+.mdh-sub {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--brand-terracotta);
+}
+
+.modal-story-card {
+  background: linear-gradient(135deg, #fefbf6 0%, #f7f3e8 100%);
+  border: 1px solid #ebd9b8;
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.modal-story-card h3 {
+  font-size: 16px;
+  color: #78350f;
+  margin-bottom: 8px;
+}
+
+.modal-story-card p {
+  color: #451a03;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.modal-section h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: var(--ink-primary);
+}
+
+.modal-section p {
+  font-size: 15px;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+.modal-highlight-box {
+  background: var(--bg-page);
+  border: 1px solid var(--line-subtle);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.modal-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.modal-chip {
+  background: var(--bg-chip);
+  border-radius: 99px;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.modal-action-bar {
+  padding-top: 10px;
+}
+
+.btn-modal-tasted {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--line-strong);
+  background: #ffffff;
+  color: var(--ink-primary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-modal-tasted.active {
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: #ffffff;
+}

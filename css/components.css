@@ -1,0 +1,334 @@
+/* ==========================================================================
+   KnowYourRoot - Components: Trivia Game, Floating Dock & Confetti
+   ========================================================================== */
+
+/* ==========================================================================
+   Trivia Section & Game Card
+   ========================================================================== */
+
+.trivia-section {
+  padding: 32px 0 64px;
+}
+
+.trivia-box {
+  background: var(--bg-surface);
+  border: 1.5px solid var(--line-subtle);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  max-width: 680px;
+  margin: 0 auto;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.trivia-box.active {
+  text-align: left;
+}
+
+.trivia-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.trivia-box h3 {
+  font-size: 26px;
+  margin-bottom: 12px;
+}
+
+.trivia-box p {
+  color: var(--ink-secondary);
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.btn-trivia-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-light));
+  color: #ffffff;
+  padding: 13px 28px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 16px;
+  border: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 107, 79, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-trivia-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(15, 107, 79, 0.45);
+}
+
+.trivia-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.trivia-counter {
+  color: var(--brand-primary);
+}
+
+.trivia-score-badge {
+  color: var(--ink-muted);
+}
+
+.trivia-progress-bar {
+  height: 6px;
+  background: var(--line-subtle);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.tpb-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-light));
+  transition: width 0.3s ease;
+}
+
+.trivia-q-text {
+  font-size: 20px;
+  line-height: 1.45;
+  margin-bottom: 20px;
+  color: var(--ink-primary);
+}
+
+.trivia-options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 600px) {
+  .trivia-options-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.trivia-opt-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-page);
+  border: 1.5px solid var(--line-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  color: var(--ink-primary);
+}
+
+.trivia-opt-btn:hover:not(:disabled) {
+  border-color: var(--brand-primary);
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.opt-prefix {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-chip);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink-secondary);
+}
+
+.trivia-opt-btn.correct {
+  background: #eafaf1;
+  border-color: #22c55e;
+  color: #14532d;
+}
+
+.trivia-opt-btn.correct .opt-prefix {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.trivia-opt-btn.wrong {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #7f1d1d;
+}
+
+.trivia-opt-btn.wrong .opt-prefix {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.trivia-fact-box {
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  line-height: 1.55;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.trivia-fact-box.fact-correct {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+
+.trivia-fact-box.fact-wrong {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.fact-title {
+  font-weight: 800;
+  margin-bottom: 4px;
+  font-size: 14.5px;
+}
+
+.trivia-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-trivia-next {
+  background: var(--brand-primary);
+  color: #ffffff;
+  border: 0;
+  padding: 11px 22px;
+  border-radius: var(--radius-full);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Result Box */
+.trivia-box.result {
+  text-align: center;
+}
+
+.trivia-result-icon {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+
+.trivia-final-score {
+  font-size: 54px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-terracotta));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.trivia-result-badge {
+  display: inline-block;
+  background: var(--brand-gold-soft);
+  color: #92400e;
+  border: 1px solid #fde68a;
+  padding: 6px 18px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+/* ==========================================================================
+   Mobile Floating Navigation Dock
+   ========================================================================== */
+
+.mobile-dock {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .mobile-dock {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 100;
+    max-width: 440px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(15, 107, 79, 0.2);
+    border-radius: var(--radius-full);
+    box-shadow: 0 10px 30px rgba(15, 70, 45, 0.18);
+  }
+
+  .dock-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    transition: color 0.15s;
+  }
+
+  .dock-item:hover, .dock-item:focus {
+    color: var(--brand-primary);
+  }
+
+  .dock-icon {
+    font-size: 18px;
+  }
+}
+
+/* ==========================================================================
+   Confetti Explosion Effect
+   ========================================================================== */
+
+.confetti-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -20px;
+  width: 10px;
+  height: 14px;
+  opacity: 0.9;
+  animation: confettiFall 2.8s linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    top: -10%;
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    top: 105%;
+    transform: rotate(720deg) scale(0.6);
+    opacity: 0;
+  }
+}
