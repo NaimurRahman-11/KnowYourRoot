@@ -5,79 +5,99 @@ import confetti from 'canvas-confetti';
 export const THEMES = [
   {
     id: "emerald",
-    nameEn: "Emerald Heritage",
-    nameBn: "পান্না সবুজ",
-    bg: "#05130e",
-    cardBg: "#0a2219",
-    divBg: "#0f2e22",
-    divBgActive: "#143d2e",
+    nameEn: "Royal Botanical & Sovereign Gold",
+    nameBn: "রাজকীয় বোটানিক্যাল ও স্বর্ণালী",
+    isLight: false,
+    bg: "#071e16",
+    bgGradientEnd: "#030e0b",
+    cardBg: "#0d2c20",
+    divBg: "#11382a",
+    divBgActive: "#174735",
     stroke: "#10b981",
     v1: "#10b981",
     v2: "#059669",
     ink: "#ffffff",
-    muted: "#94a3b8",
-    gold: "#f59e0b",
-    accent: "#34d399",
-    border: "rgba(52, 211, 153, 0.35)",
-    borderActive: "rgba(245, 158, 11, 0.6)",
-    dot: "#f59e0b"
-  },
-  {
-    id: "terracotta",
-    nameEn: "Clay Terracotta",
-    nameBn: "পোড়ামাটি",
-    bg: "#180c07",
-    cardBg: "#28150d",
-    divBg: "#351c12",
-    divBgActive: "#442417",
-    stroke: "#ea580c",
-    v1: "#f97316",
-    v2: "#c2410c",
-    ink: "#ffffff",
-    muted: "#cbd5e1",
+    inkSecondary: "#e2f5ec",
+    muted: "#9fd3be",
     gold: "#fbbf24",
-    accent: "#fb923c",
-    border: "rgba(249, 115, 22, 0.4)",
-    borderActive: "rgba(251, 191, 36, 0.6)",
+    goldSoft: "rgba(251, 191, 36, 0.16)",
+    accent: "#34d399",
+    border: "rgba(52, 211, 153, 0.28)",
+    borderActive: "#fbbf24",
+    sealBorder: "#fbbf24",
     dot: "#fbbf24"
   },
   {
+    id: "ivory",
+    nameEn: "Heritage Parchment & Forest Pine",
+    nameBn: "ঐতিহ্যবাহী প্যার্চমেন্ট ও পাইন",
+    isLight: true,
+    bg: "#fcfaf6",
+    bgGradientEnd: "#f3ede2",
+    cardBg: "#ffffff",
+    divBg: "#faf6ed",
+    divBgActive: "#ebf7f1",
+    stroke: "#065f46",
+    v1: "#059669",
+    v2: "#047857",
+    ink: "#0f291e",
+    inkSecondary: "#1e3d30",
+    muted: "#446959",
+    gold: "#b45309",
+    goldSoft: "rgba(180, 83, 9, 0.12)",
+    accent: "#059669",
+    border: "#d9e5dd",
+    borderActive: "#059669",
+    sealBorder: "#b45309",
+    dot: "#b45309"
+  },
+  {
     id: "midnight",
-    nameEn: "Midnight Royal",
-    nameBn: "নীল রাত",
-    bg: "#050b18",
-    cardBg: "#0e1a35",
-    divBg: "#14254b",
-    divBgActive: "#1b3265",
+    nameEn: "Midnight Sapphire & Champagne",
+    nameBn: "নীল রজনী ও শ্যাম্পেন গোল্ড",
+    isLight: false,
+    bg: "#081224",
+    bgGradientEnd: "#040913",
+    cardBg: "#0f1f38",
+    divBg: "#142847",
+    divBgActive: "#1b355d",
     stroke: "#38bdf8",
     v1: "#38bdf8",
     v2: "#6366f1",
     ink: "#ffffff",
+    inkSecondary: "#e2e8f0",
     muted: "#94a3b8",
-    gold: "#f59e0b",
+    gold: "#fbbf24",
+    goldSoft: "rgba(251, 191, 36, 0.18)",
     accent: "#60a5fa",
-    border: "rgba(56, 189, 248, 0.4)",
-    borderActive: "rgba(245, 158, 11, 0.6)",
-    dot: "#f43f5e"
+    border: "rgba(255, 255, 255, 0.18)",
+    borderActive: "#fbbf24",
+    sealBorder: "#fbbf24",
+    dot: "#fbbf24"
   },
   {
-    id: "sunset",
-    nameEn: "Sunset Crimson",
-    nameBn: "গোধূলি আভা",
-    bg: "#180612",
-    cardBg: "#2b0d20",
-    divBg: "#3a132c",
-    divBgActive: "#4d1a3b",
-    stroke: "#ec4899",
-    v1: "#f43f5e",
-    v2: "#db2777",
-    ink: "#ffffff",
-    muted: "#cbd5e1",
-    gold: "#fcd34d",
-    accent: "#f472b6",
-    border: "rgba(244, 63, 94, 0.4)",
-    borderActive: "rgba(252, 211, 77, 0.6)",
-    dot: "#fbbf24"
+    id: "terracotta",
+    nameEn: "Warm Clay & Burnished Sand",
+    nameBn: "পোড়ামাটি ও সোনালী বালুকা",
+    isLight: true,
+    bg: "#faf5ef",
+    bgGradientEnd: "#f0e5da",
+    cardBg: "#ffffff",
+    divBg: "#fbf6f0",
+    divBgActive: "#fdeee5",
+    stroke: "#c2410c",
+    v1: "#ea580c",
+    v2: "#9a3412",
+    ink: "#2e150a",
+    inkSecondary: "#452212",
+    muted: "#6e4b3c",
+    gold: "#d97706",
+    goldSoft: "rgba(217, 119, 6, 0.14)",
+    accent: "#ea580c",
+    border: "#e5d5c7",
+    borderActive: "#ea580c",
+    sealBorder: "#c2410c",
+    dot: "#d97706"
   }
 ];
 
@@ -102,12 +122,12 @@ export const CROWN_JEWELS = [
 ];
 
 export function getRankTitle(count, lang = 'bn') {
-  if (count >= 64) return lang === 'bn' ? "গ্র্যান্ড মাস্টার অব বেঙ্গল রুটস (Grand Sovereign)" : "Grand Sovereign of 64 Districts (100%)";
-  if (count >= 50) return lang === 'bn' ? "জীবন্ত কিংবদন্তি (Living Legend)" : "Living Legend (Grand Connoisseur)";
-  if (count >= 30) return lang === 'bn' ? "শিকড়ের মহারাজ (Master of Roots)" : "Master of Roots (Level 4)";
-  if (count >= 15) return lang === 'bn' ? "বাংলার রসনাবিদ (Culinary Connoisseur)" : "Culinary Connoisseur (Level 3)";
-  if (count >= 5) return lang === 'bn' ? "অভিজ্ঞ স্বাদ সন্ধানী (Heritage Wanderer)" : "Heritage Wanderer (Level 2)";
-  return lang === 'bn' ? "শুরুয়াতি পথিক (Curious Explorer)" : "Curious Explorer (Level 1)";
+  if (count >= 64) return lang === 'bn' ? "গ্র্যান্ড সার্বভৌম রসনাবিদ (Grand Sovereign of 64 Districts)" : "Grand Sovereign of 64 Districts (100% Conquered)";
+  if (count >= 50) return lang === 'bn' ? "জীবন্ত ঐতিহ্য কিংবদন্তি (Living Heritage Legend)" : "Living Heritage Legend (Tier 5)";
+  if (count >= 30) return lang === 'bn' ? "শিকড়ের মহারাজ (Master of Bengal Roots)" : "Master of Bengal Roots (Tier 4)";
+  if (count >= 15) return lang === 'bn' ? "বাংলার বিশিষ্ট রসনাবিদ (Culinary Connoisseur)" : "Culinary Connoisseur (Tier 3)";
+  if (count >= 5) return lang === 'bn' ? "অভিজ্ঞ স্বাদ সন্ধানী (Heritage Wanderer)" : "Heritage Wanderer (Tier 2)";
+  return lang === 'bn' ? "শুরুয়াতি পথিক (Curious Explorer)" : "Curious Explorer (Tier 1)";
 }
 
 export function bnDigits(num) {
@@ -136,8 +156,8 @@ function loadImage(src) {
 }
 
 /**
- * Generates an ultra-legible, prestigious, and scalable 1200 x 1600 px Taste Passport
- * that seamlessly handles 1 to ALL 64 districts without crowding.
+ * Generates an eye-soothing, prestigious, high-visibility 1200 x 1600 px Taste Passport
+ * with natural contrast, non-crowded divisional chapters, and readable typography.
  */
 export async function generatePassportCanvas(options = {}) {
   const selectedSet = options.selected || options.visitedSet || options.selectedDistricts || new Set();
@@ -164,62 +184,40 @@ export async function generatePassportCanvas(options = {}) {
   const FONT_HEAD = '"Hind Siliguri", "Noto Sans Bengali", sans-serif';
   const FONT_BODY = '"Plus Jakarta Sans", "Noto Sans Bengali", sans-serif';
 
-  // 1. Luxury Dark Background
-  ctx.fillStyle = theme.bg;
+  // 1. Soothing Background with gentle warm vignette
+  const bgGrad = ctx.createRadialGradient(width / 2, height / 2, 80, width / 2, height / 2, 880);
+  bgGrad.addColorStop(0, theme.bg);
+  bgGrad.addColorStop(1, theme.bgGradientEnd || theme.bg);
+  ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, width, height);
 
-  // Subtle center radial glow
-  const radialGlow = ctx.createRadialGradient(width / 2, height / 2, 80, width / 2, height / 2, 750);
-  radialGlow.addColorStop(0, theme.cardBg);
-  radialGlow.addColorStop(1, theme.bg);
-  ctx.fillStyle = radialGlow;
-  ctx.fillRect(0, 0, width, height);
-
-  // 2. Watermark Silhouette of Bangladesh Map in Center Background (Delicate 7% opacity)
-  ctx.save();
-  ctx.globalAlpha = 0.07;
-  const wmScale = 1.65;
-  const wmX = (width - DISTRICTS_GEO.w * wmScale) / 2;
-  const wmY = 150;
-  ctx.translate(wmX, wmY);
-  ctx.scale(wmScale, wmScale);
-  for (const f of DISTRICTS_GEO.f) {
-    const p = new Path2D(f.d);
-    ctx.fillStyle = theme.stroke;
-    ctx.fill(p);
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 1;
-    ctx.stroke(p);
-  }
-  ctx.restore();
-
-  // 3. Double Gold / Metallic Border Frame
-  const pad = 44;
+  // 2. Elegant Guilloche Frame & Ornaments (No intrusive watermark that obscures text)
+  const pad = 42;
   ctx.strokeStyle = theme.gold;
   ctx.lineWidth = 3.5;
-  roundRect(ctx, pad, pad, width - pad * 2, height - pad * 2, 28);
+  roundRect(ctx, pad, pad, width - pad * 2, height - pad * 2, 22);
   ctx.stroke();
 
-  // Security dashed line
+  // Inner decorative stitch line
   ctx.save();
   ctx.strokeStyle = theme.border;
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 1.4;
   ctx.setLineDash([8, 6]);
-  roundRect(ctx, pad + 12, pad + 12, width - (pad + 12) * 2, height - (pad + 12) * 2, 20);
+  roundRect(ctx, pad + 12, pad + 12, width - (pad + 12) * 2, height - (pad + 12) * 2, 16);
   ctx.stroke();
   ctx.restore();
 
-  // Corner Ornaments
+  // Corner Filigree Ornaments
   const drawCorner = (cx, cy, sx, sy) => {
     ctx.save();
     ctx.translate(cx, cy);
     ctx.scale(sx, sy);
     ctx.strokeStyle = theme.gold;
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2.4;
     ctx.beginPath();
-    ctx.moveTo(14, 28);
+    ctx.moveTo(14, 30);
     ctx.lineTo(14, 14);
-    ctx.lineTo(28, 14);
+    ctx.lineTo(30, 14);
     ctx.stroke();
     ctx.restore();
   };
@@ -228,62 +226,62 @@ export async function generatePassportCanvas(options = {}) {
   drawCorner(pad + 18, height - pad - 18, 1, -1);
   drawCorner(width - pad - 18, height - pad - 18, -1, -1);
 
-  // 4. Header Section: Republic Crest & Diplomatic Banner
+  // 3. Header Bar: People's Republic & Formal Crest Title
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
   ctx.fillStyle = theme.gold;
   ctx.font = `800 15px ${FONT_BODY}`;
-  ctx.fillText("PEOPLE'S REPUBLIC OF BANGLADESH · গণপ্রজাতন্ত্রী বাংলাদেশ", width / 2, pad + 40);
+  ctx.fillText("PEOPLE'S REPUBLIC OF BANGLADESH · গণপ্রজাতন্ত্রী বাংলাদেশ", width / 2, pad + 38);
 
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `800 34px ${FONT_HEAD}`;
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 36px ${FONT_HEAD}`;
   ctx.fillText(
     isBn ? "বাংলাদেশ রন্ধন ঐতিহ্য সনদ ও টেস্ট পাসপোর্ট" : "OFFICIAL CULINARY HERITAGE PASSPORT",
     width / 2,
     pad + 80
   );
 
-  ctx.fillStyle = theme.accent;
+  ctx.fillStyle = theme.muted;
   ctx.font = `600 16px ${FONT_BODY}`;
   ctx.fillText(
-    isBn ? "৬৪ জেলার আদি স্বাদ ও ভৌগোলিক সংস্কৃতি অভিযাত্রা" : "Definitive Gastronomic Anthology of 64 Districts",
+    isBn ? "৬৪ জেলার প্রামাণ্য আঞ্চলিক খাদ্যাভ্যাস ও ভৌগোলিক সংস্কৃতি অভিযাত্রা" : "64 Districts Authentic Gastronomy & Cultural Odysseys",
     width / 2,
     pad + 114
   );
 
-  // Serial Number Tag
+  // Document Serial Tag
   const hashVal = Math.abs(userName.split('').reduce((a, b) => (a << 5) - a + b.charCodeAt(0), 0) % 90000 + 10000);
   const serialNo = `BD-KYR-2026-${hashVal}`;
-  ctx.fillStyle = "rgba(255, 255, 255, 0.07)";
-  roundRect(ctx, width / 2 - 150, pad + 132, 300, 28, 14);
+  ctx.fillStyle = theme.goldSoft;
+  roundRect(ctx, width / 2 - 170, pad + 132, 340, 30, 15);
   ctx.fill();
-  ctx.strokeStyle = theme.border;
+  ctx.strokeStyle = theme.gold;
   ctx.lineWidth = 1;
   ctx.stroke();
 
-  ctx.fillStyle = theme.muted;
-  ctx.font = `700 12px ${FONT_BODY}`;
-  ctx.fillText(`DOCUMENT ID: ${serialNo}`, width / 2, pad + 146);
+  ctx.fillStyle = theme.ink;
+  ctx.font = `700 13px ${FONT_BODY}`;
+  ctx.fillText(`HERITAGE DOCUMENT ID: ${serialNo}`, width / 2, pad + 147);
 
-  // 5. Traveler Profile Identity Plaque
-  const profileY = pad + 175;
-  const profileH = 142;
+  // 4. Traveler Profile Identity Plaque (High Contrast & Clear)
+  const profileY = pad + 176;
+  const profileH = 144;
   const profileW = width - (pad + 24) * 2;
   const profileX = pad + 24;
 
   ctx.fillStyle = theme.cardBg;
-  roundRect(ctx, profileX, profileY, profileW, profileH, 20);
+  roundRect(ctx, profileX, profileY, profileW, profileH, 18);
   ctx.fill();
   ctx.strokeStyle = theme.border;
-  ctx.lineWidth = 1.5;
+  ctx.lineWidth = 1.6;
   ctx.stroke();
 
   // Load avatar
   const userPhotoImg = await loadImage(avatarSrc);
   const avatarSize = 100;
-  const avatarX = profileX + 22;
-  const avatarY = profileY + 21;
+  const avatarX = profileX + 24;
+  const avatarY = profileY + 22;
 
   ctx.save();
   roundRect(ctx, avatarX, avatarY, avatarSize, avatarSize, 50);
@@ -302,7 +300,7 @@ export async function generatePassportCanvas(options = {}) {
     ctx.fillRect(avatarX, avatarY, avatarSize, avatarSize);
 
     ctx.fillStyle = "#ffffff";
-    ctx.font = `800 44px ${FONT_HEAD}`;
+    ctx.font = `800 46px ${FONT_HEAD}`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     const initial = (userName.trim() ? userName.trim()[0] : (isBn ? 'বা' : 'K')).toUpperCase();
@@ -317,14 +315,14 @@ export async function generatePassportCanvas(options = {}) {
   ctx.arc(avatarX + avatarSize / 2, avatarY + avatarSize / 2, avatarSize / 2 + 2, 0, Math.PI * 2);
   ctx.stroke();
 
-  // Traveler Info text
-  const textStartX = avatarX + avatarSize + 26;
+  // Traveler details
+  const textStartX = avatarX + avatarSize + 28;
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
 
   const travelerName = userName.trim() ? userName.trim() : (isBn ? "বাংলার রসিক অভিযাত্রী" : "Bengal Roots Traveler");
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `800 28px ${FONT_HEAD}`;
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 30px ${FONT_HEAD}`;
   ctx.fillText(travelerName, textStartX, profileY + 50);
 
   const tastedCount = selected.size;
@@ -335,12 +333,12 @@ export async function generatePassportCanvas(options = {}) {
 
   // Exploration Progress Meter
   const pct = Math.round((tastedCount / 64) * 100);
-  const barW = 380;
-  const barH = 10;
+  const barW = 400;
+  const barH = 12;
   const barY = profileY + 98;
 
-  ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-  roundRect(ctx, textStartX, barY, barW, barH, 5);
+  ctx.fillStyle = theme.isLight ? "#e5ded2" : "rgba(255, 255, 255, 0.12)";
+  roundRect(ctx, textStartX, barY, barW, barH, 6);
   ctx.fill();
 
   if (pct > 0) {
@@ -348,54 +346,54 @@ export async function generatePassportCanvas(options = {}) {
     fillGrad.addColorStop(0, theme.v1);
     fillGrad.addColorStop(1, theme.gold);
     ctx.fillStyle = fillGrad;
-    roundRect(ctx, textStartX, barY, Math.max(12, (barW * pct) / 100), barH, 5);
+    roundRect(ctx, textStartX, barY, Math.max(14, (barW * pct) / 100), barH, 6);
     ctx.fill();
   }
 
   // Right Tally Box
   ctx.textAlign = "right";
-  ctx.fillStyle = theme.gold;
-  ctx.font = `800 52px ${FONT_HEAD}`;
-  ctx.fillText(`${isBn ? bnDigits(tastedCount) : tastedCount}`, profileX + profileW - 74, profileY + 65);
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 56px ${FONT_HEAD}`;
+  ctx.fillText(`${isBn ? bnDigits(tastedCount) : tastedCount}`, profileX + profileW - 84, profileY + 70);
 
   ctx.fillStyle = theme.muted;
-  ctx.font = `600 24px ${FONT_HEAD}`;
-  ctx.fillText(isBn ? "/ ৬৪" : "/ 64", profileX + profileW - 24, profileY + 65);
+  ctx.font = `700 26px ${FONT_HEAD}`;
+  ctx.fillText(isBn ? "/ ৬৪" : "/ 64", profileX + profileW - 24, profileY + 70);
 
-  ctx.fillStyle = theme.accent;
-  ctx.font = `700 15px ${FONT_BODY}`;
-  ctx.fillText(isBn ? `${bnDigits(pct)}% সম্পন্ন` : `${pct}% Explored`, profileX + profileW - 24, profileY + 104);
+  ctx.fillStyle = theme.stroke;
+  ctx.font = `800 16px ${FONT_BODY}`;
+  ctx.fillText(isBn ? `${bnDigits(pct)}% স্বাদ সম্পন্ন` : `${pct}% Explored`, profileX + profileW - 24, profileY + 108);
 
-  // 6. CENTERPIECE: The 8 Divisional Heritage Chapters (Scalable & 100% Legible!)
+  // 5. CENTERPIECE: The 8 Divisional Heritage Chapters (Clean, High-Contrast & Eye-Soothing)
   const divSectionY = profileY + profileH + 26;
 
   ctx.textAlign = "left";
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `800 22px ${FONT_HEAD}`;
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 24px ${FONT_HEAD}`;
   ctx.fillText(
-    isBn ? "★ ৮ বিভাগীয় ঐতিহ্য ও অন্বেষণ সূচক (Divisional Heritage Chapters):" : "★ 8 DIVISIONAL HERITAGE CHAPTERS & TASTED DELICACIES:",
+    isBn ? "★ ৮ বিভাগীয় অন্বেষণ ও ঐতিহ্য বিবরণী (Divisional Chapters):" : "★ 8 DIVISIONAL CHAPTERS & EXPLORED SPECIALTIES:",
     pad + 26,
     divSectionY + 8
   );
 
   ctx.textAlign = "right";
   ctx.fillStyle = theme.muted;
-  ctx.font = `600 13px ${FONT_BODY}`;
+  ctx.font = `700 14px ${FONT_BODY}`;
   ctx.fillText(
-    isBn ? "৬৪ জেলার পূর্ণাঙ্গ স্বাদ বিবরণী" : "All 64 Regional Specialties Classified",
+    isBn ? "৬৪ জেলার প্রামাণ্য আঞ্চলিক খাদ্যকোষ" : "Authentic Regional Records",
     width - (pad + 26),
     divSectionY + 8
   );
 
-  // 2 columns x 4 rows = 8 division cards
+  // 2 columns x 4 rows
   const gridX = pad + 24;
   const gridY = divSectionY + 24;
   const gridW = width - (pad + 24) * 2;
   const cols = 2;
-  const colGap = 18;
+  const colGap = 20;
   const rowGap = 16;
   const cardW = (gridW - colGap) / cols;
-  const cardH = 148;
+  const cardH = 154;
 
   DIVISION_META.forEach((div, idx) => {
     const col = idx % cols;
@@ -403,34 +401,36 @@ export async function generatePassportCanvas(options = {}) {
     const cx = gridX + col * (cardW + colGap);
     const cy = gridY + row * (cardH + rowGap);
 
-    // Get all districts belonging to this division
     const divDistricts = FOOD_CULTURE_DATA.filter((d) => d.divisionEn === div.id);
     const divTasted = divDistricts.filter((d) => selected.has(d.id));
     const isComplete = divTasted.length === div.count && div.count > 0;
     const hasTastedAny = divTasted.length > 0;
 
     // Card background
-    ctx.fillStyle = isComplete ? theme.divBgActive : (hasTastedAny ? theme.divBg : "rgba(255, 255, 255, 0.02)");
-    roundRect(ctx, cx, cy, cardW, cardH, 16);
+    ctx.fillStyle = isComplete
+      ? theme.divBgActive
+      : (hasTastedAny ? theme.divBg : (theme.isLight ? "#fbfaf7" : "rgba(255, 255, 255, 0.02)"));
+    roundRect(ctx, cx, cy, cardW, cardH, 14);
     ctx.fill();
 
     // Border
-    ctx.strokeStyle = isComplete ? theme.borderActive : (hasTastedAny ? theme.border : "rgba(255, 255, 255, 0.07)");
-    ctx.lineWidth = isComplete ? 2 : 1.2;
+    ctx.strokeStyle = isComplete
+      ? theme.gold
+      : (hasTastedAny ? theme.border : (theme.isLight ? "#e5ded4" : "rgba(255, 255, 255, 0.08)"));
+    ctx.lineWidth = isComplete ? 2 : 1.4;
     ctx.stroke();
 
-    // Division Card Header
+    // Division Title & Icon
     ctx.textAlign = "left";
     ctx.textBaseline = "alphabetic";
 
-    // Icon + Division Title
-    ctx.font = "20px sans-serif";
-    ctx.fillText(div.icon, cx + 16, cy + 30);
+    ctx.font = "22px sans-serif";
+    ctx.fillText(div.icon, cx + 18, cy + 32);
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `800 18px ${FONT_HEAD}`;
+    ctx.fillStyle = theme.ink;
+    ctx.font = `800 20px ${FONT_HEAD}`;
     const divTitle = isBn ? `${div.bn} বিভাগ` : `${div.en} Division`;
-    ctx.fillText(divTitle, cx + 46, cy + 30);
+    ctx.fillText(divTitle, cx + 50, cy + 32);
 
     // Score Tag right
     ctx.textAlign = "right";
@@ -440,36 +440,35 @@ export async function generatePassportCanvas(options = {}) {
 
     if (isComplete) {
       ctx.fillStyle = theme.gold;
-      ctx.font = `800 13px ${FONT_BODY}`;
-      ctx.fillText(`★ ${scoreText} COMPLETE`, cx + cardW - 16, cy + 30);
+      ctx.font = `800 14px ${FONT_BODY}`;
+      ctx.fillText(`★ ${scoreText} ALL`, cx + cardW - 18, cy + 32);
     } else {
-      ctx.fillStyle = hasTastedAny ? theme.accent : theme.muted;
-      ctx.font = `700 13px ${FONT_BODY}`;
-      ctx.fillText(scoreText, cx + cardW - 16, cy + 30);
+      ctx.fillStyle = hasTastedAny ? theme.stroke : theme.muted;
+      ctx.font = `800 14px ${FONT_BODY}`;
+      ctx.fillText(scoreText, cx + cardW - 18, cy + 32);
     }
 
-    // Mini division progress bar
-    const miniBarW = cardW - 32;
+    // Mini progress track
+    const miniBarW = cardW - 36;
     const miniBarH = 5;
     const miniBarY = cy + 42;
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
-    roundRect(ctx, cx + 16, miniBarY, miniBarW, miniBarH, 3);
+    ctx.fillStyle = theme.isLight ? "#e6decb" : "rgba(255, 255, 255, 0.1)";
+    roundRect(ctx, cx + 18, miniBarY, miniBarW, miniBarH, 3);
     ctx.fill();
 
     if (divTasted.length > 0) {
-      const fillW = Math.max(6, (miniBarW * divTasted.length) / div.count);
+      const fillW = Math.max(10, (miniBarW * divTasted.length) / div.count);
       ctx.fillStyle = isComplete ? theme.gold : theme.v1;
-      roundRect(ctx, cx + 16, miniBarY, fillW, miniBarH, 3);
+      roundRect(ctx, cx + 18, miniBarY, fillW, miniBarH, 3);
       ctx.fill();
     }
 
-    // Content: Show what food items have been tasted in this division!
+    // Food names content
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
 
     if (hasTastedAny) {
-      // Build a clean string of tasted foods in this division
       const tastedFoodNames = divTasted.map((d) => {
         return isBn ? d.primaryFood?.nameBn : d.primaryFood?.nameEn;
       }).filter(Boolean);
@@ -477,125 +476,133 @@ export async function generatePassportCanvas(options = {}) {
       const itemsText = tastedFoodNames.slice(0, 3).join(" · ");
       const extraCount = tastedFoodNames.length - 3;
 
-      ctx.fillStyle = isComplete ? "#ffffff" : theme.ink;
-      ctx.font = `700 13.5px ${FONT_HEAD}`;
+      ctx.fillStyle = theme.ink;
+      ctx.font = `700 15px ${FONT_HEAD}`;
       ctx.fillText(
         `✓ চেখেছেন: ${itemsText}${extraCount > 0 ? ` +${isBn ? bnDigits(extraCount) : extraCount}টি` : ""}`,
-        cx + 16,
+        cx + 18,
         cy + 58
       );
 
-      // District origins
+      // District names
       const distNames = divTasted.map((d) => isBn ? d.nameBn : d.nameEn).slice(0, 4).join(", ");
-      ctx.fillStyle = theme.gold;
-      ctx.font = `500 12px ${FONT_BODY}`;
-      ctx.fillText(`📍 জেলা: ${distNames}${divTasted.length > 4 ? "..." : ""}`, cx + 16, cy + 82);
+      ctx.fillStyle = theme.muted;
+      ctx.font = `600 13px ${FONT_BODY}`;
+      ctx.fillText(`📍 জেলা: ${distNames}${divTasted.length > 4 ? "..." : ""}`, cx + 18, cy + 84);
 
-      // Status pill
-      ctx.fillStyle = isComplete ? "rgba(245, 158, 11, 0.2)" : "rgba(16, 185, 129, 0.15)";
-      roundRect(ctx, cx + 16, cy + 106, cardW - 32, 26, 8);
+      // Status pill at bottom
+      ctx.fillStyle = isComplete
+        ? (theme.isLight ? "rgba(180, 83, 9, 0.14)" : "rgba(251, 191, 36, 0.22)")
+        : (theme.isLight ? "rgba(5, 150, 105, 0.14)" : "rgba(16, 185, 129, 0.2)");
+      roundRect(ctx, cx + 18, cy + 110, cardW - 36, 30, 8);
       ctx.fill();
 
-      ctx.fillStyle = isComplete ? theme.gold : "#34d399";
-      ctx.font = `700 11.5px ${FONT_BODY}`;
+      ctx.fillStyle = isComplete ? theme.gold : theme.accent;
+      ctx.font = `800 13px ${FONT_BODY}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(
         isComplete
-          ? (isBn ? "👑 বিভাগের শতভাগ ঐতিহ্য সম্পন্ন!" : "👑 100% REGIONAL HERITAGE CONQUERED")
+          ? (isBn ? "👑 বিভাগের শতভাগ ঐতিহ্য সম্পন্ন!" : "👑 100% REGIONAL CHAPTER CONQUERED")
           : (isBn ? `✓ ${bnDigits(divTasted.length)}টি জেলার স্বাদ প্রমাণিত` : `✓ ${divTasted.length} Districts Authenticated`),
         cx + cardW / 2,
-        cy + 119
+        cy + 125
       );
     } else {
-      // Unexplored prompt
       ctx.fillStyle = theme.muted;
-      ctx.font = `500 12.5px ${FONT_HEAD}`;
+      ctx.font = `600 14px ${FONT_HEAD}`;
       const sampleDist = divDistricts.slice(0, 3).map((d) => isBn ? d.nameBn : d.nameEn).join(", ");
-      ctx.fillText(`এই বিভাগের স্বাদ এখনো গ্রহণ করেননি (${sampleDist}...)`, cx + 16, cy + 64);
+      ctx.fillText(`এই বিভাগের ঐতিহ্য এখনো চেখে দেখা বাকি (${sampleDist}...)`, cx + 18, cy + 64);
 
-      ctx.fillStyle = "rgba(255, 255, 255, 0.04)";
-      roundRect(ctx, cx + 16, cy + 102, cardW - 32, 26, 8);
+      ctx.fillStyle = theme.isLight ? "rgba(0, 0, 0, 0.04)" : "rgba(255, 255, 255, 0.05)";
+      roundRect(ctx, cx + 18, cy + 108, cardW - 36, 28, 8);
       ctx.fill();
 
       ctx.fillStyle = theme.muted;
-      ctx.font = `600 11.5px ${FONT_BODY}`;
+      ctx.font = `700 12.5px ${FONT_BODY}`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText(isBn ? "+ পরবর্তী ভ্রমণ স্বাদ তালিকা" : "+ Awaiting Exploration", cx + cardW / 2, cy + 115);
+      ctx.fillText(isBn ? "+ পরবর্তী ভ্রমণ স্বাদ তালিকা" : "+ Awaiting Exploration", cx + cardW / 2, cy + 122);
     }
   });
 
-  // 7. CROWN JEWELS GI STRIP (Y: 1290)
-  const jewelY = gridY + 4 * (cardH + rowGap) + 16;
+  // 6. CROWN JEWELS GI SEALS (Clean, Eye-Soothing & Visible)
+  const jewelY = gridY + 4 * (cardH + rowGap) + 18;
 
   ctx.textAlign = "left";
   ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `800 20px ${FONT_HEAD}`;
-  ctx.fillText(isBn ? "★ স্বীকৃত ভৌগোলিক নির্দেশক ও রাজকীয় স্বাদ (Crown Heritage Seals):" : "★ ICONIC GI & ROYAL CULINARY SEALS:", pad + 26, jewelY);
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 22px ${FONT_HEAD}`;
+  ctx.fillText(
+    isBn ? "★ শীর্ষ ভৌগোলিক নির্দেশক ও রাজকীয় স্বাদ (Crown Heritage GI Seals):" : "★ ICONIC GI & ROYAL CULINARY SEALS:",
+    pad + 26,
+    jewelY
+  );
 
   const jewelGridY = jewelY + 14;
   const jewelCols = 6;
   const jewelGap = 12;
   const jewelW = (gridW - jewelGap * (jewelCols - 1)) / jewelCols;
-  const jewelH = 92;
+  const jewelH = 96;
 
   CROWN_JEWELS.forEach((jewel, i) => {
     const jx = gridX + i * (jewelW + jewelGap);
     const isTasted = selected.has(jewel.id);
 
-    ctx.fillStyle = isTasted ? theme.divBgActive : "rgba(255, 255, 255, 0.03)";
+    ctx.fillStyle = isTasted
+      ? (theme.isLight ? "#eef7f2" : theme.divBgActive)
+      : (theme.isLight ? "#ffffff" : "rgba(255, 255, 255, 0.04)");
     roundRect(ctx, jx, jewelGridY, jewelW, jewelH, 12);
     ctx.fill();
-    ctx.strokeStyle = isTasted ? theme.gold : "rgba(255, 255, 255, 0.08)";
-    ctx.lineWidth = isTasted ? 1.5 : 1;
+
+    ctx.strokeStyle = isTasted ? theme.stroke : theme.border;
+    ctx.lineWidth = isTasted ? 2 : 1.2;
     ctx.stroke();
 
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.font = "24px sans-serif";
-    ctx.fillText(jewel.icon, jx + jewelW / 2, jewelGridY + 26);
+    ctx.font = "26px sans-serif";
+    ctx.fillText(jewel.icon, jx + jewelW / 2, jewelGridY + 28);
 
-    ctx.fillStyle = isTasted ? "#ffffff" : theme.muted;
-    ctx.font = `700 12.5px ${FONT_HEAD}`;
-    ctx.fillText(isBn ? jewel.foodBn : jewel.foodEn, jx + jewelW / 2, jewelGridY + 54);
+    ctx.fillStyle = isTasted ? theme.ink : theme.muted;
+    ctx.font = `800 14px ${FONT_HEAD}`;
+    ctx.fillText(isBn ? jewel.foodBn : jewel.foodEn, jx + jewelW / 2, jewelGridY + 56);
 
-    ctx.fillStyle = isTasted ? theme.gold : "rgba(255, 255, 255, 0.3)";
-    ctx.font = `600 10.5px ${FONT_BODY}`;
-    ctx.fillText(isTasted ? "✓ TASTED" : "UNEXPLORED", jx + jewelW / 2, jewelGridY + 74);
+    ctx.fillStyle = isTasted ? theme.accent : theme.muted;
+    ctx.font = `800 12px ${FONT_BODY}`;
+    ctx.fillText(isTasted ? "✓ TASTED" : "UNEXPLORED", jx + jewelW / 2, jewelGridY + 78);
   });
 
-  // 8. Bottom Security Seal & Footer Verification
-  const footerY = height - pad - 54;
+  // 7. Bottom Security Seal & Footer Verification
+  const footerY = height - pad - 52;
 
   // Official Gold Verification Stamp
   ctx.save();
   ctx.translate(pad + 160, footerY);
-  ctx.rotate(-0.05);
+  ctx.rotate(-0.03);
   ctx.strokeStyle = theme.gold;
-  ctx.lineWidth = 2.5;
-  roundRect(ctx, -135, -30, 270, 60, 12);
+  ctx.lineWidth = 2.4;
+  roundRect(ctx, -140, -32, 280, 64, 12);
   ctx.stroke();
 
   ctx.fillStyle = theme.gold;
-  ctx.font = `800 15px ${FONT_BODY}`;
+  ctx.font = `800 16px ${FONT_BODY}`;
   ctx.textAlign = "center";
   ctx.fillText("✓ VERIFIED ROOTS", 0, -8);
-  ctx.font = `700 11px ${FONT_HEAD}`;
-  ctx.fillText(isBn ? "খাঁটি বাংলাদেশি ঐতিহ্য ও স্বাদ" : "AUTHENTIC BENGAL HERITAGE", 0, 12);
+  ctx.font = `700 12px ${FONT_HEAD}`;
+  ctx.fillText(isBn ? "খাঁটি বাংলাদেশি ঐতিহ্য ও স্বাদ" : "AUTHENTIC BENGAL HERITAGE", 0, 14);
   ctx.restore();
 
-  // Footer Link & Signature
+  // Footer Link & Copyright
   ctx.textAlign = "right";
   ctx.textBaseline = "alphabetic";
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `800 16px ${FONT_BODY}`;
-  ctx.fillText("KnowYourRoot — আপনার শিকড়কে জানুন", width - pad - 26, footerY - 6);
+  ctx.fillStyle = theme.ink;
+  ctx.font = `800 17px ${FONT_BODY}`;
+  ctx.fillText("KnowYourRoot — আপনার শিকড়কে জানুন", width - pad - 26, footerY - 8);
 
   ctx.fillStyle = theme.muted;
-  ctx.font = `600 12px ${FONT_BODY}`;
-  ctx.fillText("https://know-your-root.vercel.app · Official Collector Edition", width - pad - 26, footerY + 16);
+  ctx.font = `600 13px ${FONT_BODY}`;
+  ctx.fillText("https://know-your-root.vercel.app · Official Heritage Collector Edition", width - pad - 26, footerY + 16);
 
   return canvas;
 }
